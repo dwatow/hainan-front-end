@@ -130,6 +130,7 @@ function uploadToServer(url) {
         success(response) {
             console.log(response.result);
             $.unblockUI();
+            window.alert('上傳成功！')
             window.location.assign("https://hainan.oss.tw/#!index");
         },
         error(jqXHR, status, errorThrown) {
