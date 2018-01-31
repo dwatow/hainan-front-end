@@ -51,7 +51,7 @@ reportSubmit.addEventListener('click', submitReport);
 // }
 
 function submitReport(event) {
-    
+
     event.preventDefault();
     if (locationFilter.value !== '選擇海灘分段') {
         const files = imageSelector.files;
@@ -75,6 +75,19 @@ function submitReport(event) {
                     mimeType: "multipart/form-data",
                     data: form
                 }
+
+                $.blockUI({
+                    message: '<h1>資料上傳中...</h1>',
+                    css: {
+                        border: 'none',
+                        padding: '15px',
+                        backgroundColor: '#000',
+                        '-webkit-border-radius': '10px',
+                        '-moz-border-radius': '10px',
+                        opacity: .7,
+                        color: '#fff'
+                    }
+                });
 
                 $.ajax(settings).done(function (response) {
                     let responseData = JSON.parse(response)['data'];
@@ -104,7 +117,7 @@ function uploadToServer(url) {
         "imageURL": url,
         "beachClean": cleanStatus,
     }
-    
+
     console.table(feedbackReport)
 
     $.ajax({
@@ -116,7 +129,8 @@ function uploadToServer(url) {
         //handles response
         success(response) {
             console.log(response.result);
-            window.location.assign("https://dwatow.github.io/hainan-front-end/index.html#!index");
+            $.unblockUI();
+            window.location.assign("https://hainan.oss.tw/#!index");
         },
         error(jqXHR, status, errorThrown) {
             console.log(jqXHR);
