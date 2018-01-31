@@ -2,6 +2,8 @@ var router = new Router();
 router.add('index', () => gotoIndex())
 router.add('active', () => active.checked = true)
 router.add('feedback', () => gotoFeedback())
+router.add('index/?id', () => console.log('id url'))
+
 router.setIndex('index');
 
 function gotoIndex() {

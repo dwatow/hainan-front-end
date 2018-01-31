@@ -182,7 +182,7 @@ let map;
 let activityInfoWindow;
 let reportInfoWindow;
 function initIndexMap() {
-    // console.log('load')
+    console.log('initMap Success')
     //HomePage Map
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 7,

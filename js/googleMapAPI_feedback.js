@@ -4,6 +4,7 @@ let reportMap;
 let feedbackInfoWindow;
 
 let currentPosition;
+let feedbackData;
 
 const feedbackPage = document.querySelector('.feedbackPage');
 feedbackPage.addEventListener('click', loadFeedbackMap);
@@ -117,6 +118,7 @@ function selectLocation(event) {
         return position.title.includes(currentLocation);
     })
     // console.log(currentLocationData);
+    feedbackData = currentLocationData[0];
     drawSelectPosition(currentLocationData[0]);
 }
 
