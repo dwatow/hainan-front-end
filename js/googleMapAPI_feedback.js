@@ -1,14 +1,11 @@
 
 let reportMarker;
-
 let reportMap;
-let createReportInfoWindow;
+let feedbackInfoWindow;
+
+let currentPosition;
 
 const feedbackPage = document.querySelector('.feedbackPage');
-
-
-let reportCurrentPosition;
-
 feedbackPage.addEventListener('click', loadFeedbackMap);
 function loadFeedbackMap() {
     window.addEventListener('hashchange', initReportMap, { once: true });
@@ -17,7 +14,8 @@ function loadFeedbackMap() {
 // window.addEventListener('hashchange', initReportMap);
 
 function initReportMap() {
-    if (reportMap === undefined) {
+    // console.log(currentPosition);
+    if (currentPosition === undefined) {
         reportMap = new google.maps.Map(document.getElementById('reportMap'), {
             center: { lat: 24.3, lng: 120.51 },
             zoom: 6,
@@ -25,57 +23,20 @@ function initReportMap() {
             fullscreenControl: false,
             streetViewControl: false,
         });
-    };
-
-
-    // if (reportCurrentPosition === undefined) {
-    //     // Try HTML5 geolocation.
-    //     if (navigator.geolocation) {
-    //         navigator.geolocation.getCurrentPosition(function (position) {
-    //             reportCurrentPosition = {
-    //                 lat: position.coords.latitude,
-    //                 lng: position.coords.longitude
-    //             };
-
-    //             marker = new google.maps.Marker({
-    //                 position: reportCurrentPosition,
-    //                 map: reportMap,
-    //                 draggable: true,
-    //                 // label: "999"
-    //             });
-
-    //             infoWindow = new google.maps.InfoWindow({
-    //                 content: '<p class = "feebackText">'+'回報位置'+'</p>'
-    //             });
-
-    //             infoWindow.open(map, marker);
-    //             reportMap.setCenter(reportCurrentPosition);
-    //             reportMap.setZoom(15);
-
-    //             google.maps.event.addListener(marker, 'drag', showFeedbackWindow);
-
-
-    //         }, function () {
-    //             handleLocationError(true, createReportInfoWindow, reportMap.getCenter());
-    //         });
-    //     } else {
-    //         // Browser doesn't support Geolocation
-    //         handleLocationError(false, createReportInfoWindow, reportMap.getCenter());
-    //     }
-    // } else {
-    //     reportMap.setCenter(reportCurrentPosition);
-    //     reportMap.setZoom(15);
-    // }
+    } else {
+        reportMap.setCenter(currentPosition);
+        reportMap.setZoom(16) 
+    }
 }
 
-// function showFeedbackWindow() {
-//     let currentMarker = this;
-//     let currentPositionText = currentMarker.getPosition().toString();
-//     let currentPosition = currentMarker.getPosition().toJSON();
-//     reportCurrentPosition = currentPosition;
-//     console.log(currentPosition);
-//     infoWindow.open(map, marker);
-// }
+function showFeedbackWindow() {
+    let currentMarker = this;
+    let currentPositionText = currentMarker.getPosition().toString();
+    currentPosition = currentMarker.getPosition().toJSON();
+    reportCurrentPosition = currentPosition;
+    console.log(currentPosition);
+    infoWindow.open(map, marker);
+}
 
 const cityFilter = document.querySelector('#feedbackCity');
 cityFilter.addEventListener('change', addBeachOption);
@@ -150,12 +111,13 @@ function clearLocationOption() {
 
 function selectLocation(event) {
     console.clear();
-    let currentPosition = this.value;
-    let currentPositionData = allBeachData.filter(function (position) {
-        return position.title.includes(currentPosition);
+    
+    let currentLocation = this.value;
+    let currentLocationData = allBeachData.filter(function (position) {
+        return position.title.includes(currentLocation);
     })
-    console.log(currentPositionData);
-    drawSelectPosition(currentPositionData[0]);
+    // console.log(currentLocationData);
+    drawSelectPosition(currentLocationData[0]);
 }
 
 function drawSelectPosition(dataObj) {
@@ -181,8 +143,11 @@ function drawSelectPosition(dataObj) {
         // clean: beach.clean
     });
 
+    currentPosition = { lat: coord[1], lng: coord[0] };
+    console.log(currentPosition)
+
     reportMap.setCenter({lat: coord[1], lng: coord[0]});
-    reportMap.setZoom(12);
+    reportMap.setZoom(16);
 
     let googleArray = [];
     dataObj.geojson.forEach(function (coord) {
@@ -197,35 +162,32 @@ function drawSelectPosition(dataObj) {
         strokeColor: 'blue',
     });
 
-    // google.maps.event.addListener(markers[index], 'click', showReportWindow);
-    // setTimeout(dropMarker(index), index * 300);
-    // reportCurrentPosition = {
-    //     lat: position.coords.latitude,
-    //     lng: position.coords.longitude
-    // };
+    feedbackInfoWindow = new google.maps.InfoWindow({
+        content: '<p class = "feebackText">' + '回報位置' + '</p>'
+    });
 
-    // marker = new google.maps.Marker({
-    //     position: reportCurrentPosition,
-    //     map: reportMap,
-    //     draggable: true,
-    //     // label: "999"
-    // });
+    feedbackInfoWindow.open(reportMap, reportMarker);
+    google.maps.event.addListener(reportMarker, 'drag', showFeedbackWindow);
+}
 
-    // infoWindow = new google.maps.InfoWindow({
-    //     content: '<p class = "feebackText">' + '回報位置' + '</p>'
-    // });
-
-    // infoWindow.open(map, marker);
-    // reportMap.setCenter(reportCurrentPosition);
-    // reportMap.setZoom(15);
-
-    // google.maps.event.addListener(marker, 'drag', showFeedbackWindow);
+//取得marker 移動座標
+function showFeedbackWindow() {
+    let currentMarker = this;
+    // let currentPositionText = currentMarker.getPosition().toString();
+    // console.log(currentMarker.getPosition().toJSON());
+    // feedbackInfoWindow.setContent ('<p>Marker Location:' + currentPositionText + '</p>');
+    currentPosition = currentMarker.getPosition().toJSON();
+    console.log(currentPosition);
+    feedbackInfoWindow.open(reportMap, reportMarker);
+    
+    // marker.setPosition(currentPosition);
+    
 }
 
 function removeReportSealine() {
     //remove pattern
     reportMap.data.forEach(function (feature) {
-        console.log(feature);
+        // console.log(feature);
         reportMap.data.remove(feature);
     });
 }

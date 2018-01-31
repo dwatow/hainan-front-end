@@ -20,9 +20,10 @@ function show(event) {
         reader.readAsDataURL(picData);
 
         reader.onload = function () {
-            if (previewTable.childElementCount === 3) {
-                previewTable.removeChild(previewTable.lastElementChild);
-                console.log(previewTable);
+            console.log(previewArea.childElementCount)
+            if (previewArea.childElementCount === 1) {
+                previewArea.removeChild(previewArea.lastElementChild);
+                console.log(previewArea);
             }
             let img = new Image();
             img.src = `${reader.result}`;
@@ -30,9 +31,9 @@ function show(event) {
         };
     } else {
         window.alert('請重新選擇小於10MB的上傳照片！');
-        console.log(imageSelector.files);
-        imageStatus.innerHTML = '請重新選擇小於10MB的上傳照片！';
-        previewArea.style.backgroundImage = '';
+        // console.log(imageSelector.files);
+        // imageStatus.innerHTML = '請重新選擇小於10MB的上傳照片！';
+        previewArea.removeChild(previewArea.lastElementChild);
     }
 }
 
