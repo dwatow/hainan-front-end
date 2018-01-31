@@ -19,6 +19,12 @@ function gotoFeedback() {
 }
 
 $(document).ready(() => {
+    if (window.location.hash.search('id') !== -1) {
+        const id = window.location.hash.split('/')[1].split('?id=')[1];
+
+        //存 id
+        //取 token
+    }
     router.start();
 })
 
