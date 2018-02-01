@@ -71,7 +71,7 @@ function initIndexMap() {
         });
     } else {
         map.setCenter({ lat: 23.5, lng: 121 });
-        map.setZoom(7);
+        map.setZoom(6);
     };
 
     if (activityInfoWindow === undefined) {
