@@ -53,7 +53,7 @@ reportSubmit.addEventListener('click', submitReport);
 function submitReport(event) {
 
     event.preventDefault();
-    if (locationFilter.value !== '選擇海灘分段') {
+    if (feedbackLocationFilter.value !== '選擇海灘分段') {
         const files = imageSelector.files;
         if (files.length === 1) {
             if (picData.size < 10485760) {

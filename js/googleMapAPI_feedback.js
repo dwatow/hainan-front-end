@@ -3,7 +3,7 @@ let reportMarker;
 let reportMap;
 let feedbackInfoWindow;
 
-let currentPosition;
+let currentFeedbackPosition;
 let feedbackData;
 
 const feedbackPage = document.querySelector('.feedbackPage');
@@ -16,7 +16,7 @@ function loadFeedbackMap() {
 
 function initReportMap() {
     // console.log(currentPosition);
-    if (currentPosition === undefined) {
+    if (currentFeedbackPosition === undefined) {
         reportMap = new google.maps.Map(document.getElementById('reportMap'), {
             center: { lat: 24.3, lng: 120.51 },
             zoom: 6,
@@ -25,7 +25,7 @@ function initReportMap() {
             streetViewControl: false,
         });
     } else {
-        reportMap.setCenter(currentPosition);
+        reportMap.setCenter(currentFeedbackPosition);
         reportMap.setZoom(16) 
     }
 }
@@ -33,19 +33,19 @@ function initReportMap() {
 function showFeedbackWindow() {
     let currentMarker = this;
     let currentPositionText = currentMarker.getPosition().toString();
-    currentPosition = currentMarker.getPosition().toJSON();
-    reportCurrentPosition = currentPosition;
-    console.log(currentPosition);
+    currentFeedbackPosition = currentMarker.getPosition().toJSON();
+    reportCurrentPosition = currentFeedbackPosition;
+    console.log(currentFeedbackPosition);
     infoWindow.open(map, marker);
 }
 
-const cityFilter = document.querySelector('#feedbackCity');
-cityFilter.addEventListener('change', addBeachOption);
+const feedbackCityFilter = document.querySelector('#feedbackCity');
+feedbackCityFilter.addEventListener('change', addBeachOption);
 
 function addBeachOption(event) {
     console.clear();
-    clearBeachOption();
-    clearLocationOption();
+    clearFeedbackBeachOption();
+    clearFeedbackLocationOption();
     let currentCity = this.value;
     let beachList = allBeachData.filter(function (beach) {
         return beach.city.includes(currentCity);
@@ -60,25 +60,28 @@ function addBeachOption(event) {
     })
 };
 
-const beachFilter = document.querySelector('#feedbackBeach');
-beachFilter.addEventListener('change', addLocationOption)
+const feedbackBeachFilter = document.querySelector('#feedbackBeach');
+feedbackBeachFilter.addEventListener('change', addLocationOption)
 
-function clearBeachOption() {
-    while (beachFilter.childNodes[0]) {
-        beachFilter.removeChild(beachFilter.childNodes[0]);
-    }
-    beachFilter.innerHTML = `<option selected disabled hidden>選擇海灘分段</option>`;
-}
+
 
 function createBeachFilterOption(beachName) {
+
     let newOption = document.createElement('option');
     newOption.setAttribute('value', beachName);
     newOption.textContent = beachName;
-    beachFilter.appendChild(newOption);
+    feedbackBeachFilter.appendChild(newOption);
+}
+
+function clearFeedbackBeachOption() {
+    while (feedbackBeachFilter.childNodes[0]) {
+        feedbackBeachFilter.removeChild(feedbackBeachFilter.childNodes[0]);
+    }
+    feedbackBeachFilter.innerHTML = `<option selected disabled hidden>選擇海灘分段</option>`;
 }
 
 function addLocationOption(event) {
-    clearLocationOption()
+    clearFeedbackLocationOption();
     let currentBeach = this.value;
     let locationList = allBeachData.filter(function (beach) {
         return beach.beachName.includes(currentBeach);
@@ -88,29 +91,30 @@ function addLocationOption(event) {
     locationList.forEach(function (location) {
         if (locationNamesArray.includes(location.title) === false) {
             locationNamesArray.push(location.title);
-            createLocationFilterOption(location.title);
+            createFeedbackLocationOption(location.title);
         }
     })
 }
 
-const locationFilter = document.querySelector('#feedbackLocation');
-locationFilter.addEventListener('change', selectLocation);
+const feedbackLocationFilter = document.querySelector('#feedbackLocation');
 
-function createLocationFilterOption(locationName) {
+function createFeedbackLocationOption(locationName) {
     let newOption = document.createElement('option');
     newOption.setAttribute('value', locationName);
     newOption.textContent = locationName;
-    locationFilter.appendChild(newOption);
+    feedbackLocationFilter.appendChild(newOption);
 }
 
-function clearLocationOption() {
-    while (locationFilter.childNodes[0]) {
-        locationFilter.removeChild(locationFilter.childNodes[0]);
+function clearFeedbackLocationOption() {
+    while (feedbackLocationFilter.childNodes[0]) {
+        feedbackLocationFilter.removeChild(feedbackLocationFilter.childNodes[0]);
     }
-    locationFilter.innerHTML = `<option selected disabled hidden>選擇海灘分段</option>`;
+    feedbackLocationFilter.innerHTML = `<option selected disabled hidden>選擇海灘分段</option>`;
 }
 
-function selectLocation(event) {
+feedbackLocationFilter.addEventListener('change', selectFeedbackLocation);
+
+function selectFeedbackLocation(event) {
     console.clear();
     
     let currentLocation = this.value;
@@ -145,8 +149,8 @@ function drawSelectPosition(dataObj) {
         // clean: beach.clean
     });
 
-    currentPosition = { lat: coord[1], lng: coord[0] };
-    console.log(currentPosition)
+    currentFeedbackPosition = { lat: coord[1], lng: coord[0] };
+    console.log(currentFeedbackPosition)
 
     reportMap.setCenter({lat: coord[1], lng: coord[0]});
     reportMap.setZoom(16);
@@ -178,8 +182,8 @@ function showFeedbackWindow() {
     // let currentPositionText = currentMarker.getPosition().toString();
     // console.log(currentMarker.getPosition().toJSON());
     // feedbackInfoWindow.setContent ('<p>Marker Location:' + currentPositionText + '</p>');
-    currentPosition = currentMarker.getPosition().toJSON();
-    console.log(currentPosition);
+    currentFeedbackPosition = currentMarker.getPosition().toJSON();
+    console.log(currentFeedbackPosition);
     feedbackInfoWindow.open(reportMap, reportMarker);
     
     // marker.setPosition(currentPosition);
