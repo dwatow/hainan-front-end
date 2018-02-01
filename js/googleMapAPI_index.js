@@ -131,18 +131,29 @@ let reportInfoWindow;
 function initIndexMap() {
     // console.log('initMap Success')
     //HomePage Map
-    map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 7,
-        center: { lat: 23.5, lng: 121 },
-        fullscreenControl: false,
-        streetViewControl: false,
-    });
-    activityInfoWindow = new google.maps.InfoWindow({
-        content: document.getElementById('activity-info-content')
-    });
-    reportInfoWindow = new google.maps.InfoWindow({
-        content: document.getElementById('report-info-content')
-    });
+    if (map === undefined) {
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 7,
+            center: { lat: 23.5, lng: 121 },
+            fullscreenControl: false,
+            streetViewControl: false,
+        });
+    } else {
+        map.setCenter({ lat: 23.5, lng: 121 });
+        map.setZoom(7);
+    };
+
+    if (activityInfoWindow === undefined) {
+        activityInfoWindow = new google.maps.InfoWindow({
+            content: document.getElementById('activity-info-content')
+        });
+    }
+   
+    if (reportInfoWindow === undefined) {
+        reportInfoWindow = new google.maps.InfoWindow({
+            content: document.getElementById('report-info-content')
+        });
+    }
     dropActivityMarker();
 };
 
