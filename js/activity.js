@@ -87,7 +87,7 @@ function selectActivityPosition(event) {
 }
 
 const activitySubmitBotton = document.querySelector('.activitySubmit');
-activitySubmitBotton.addEventListener('click', submitActivity);
+activitySubmitBotton.addEventListener('click', checkActivity);
 
 
 const activityName = document.querySelector('#activeName');
@@ -97,28 +97,33 @@ const activityOwnerPhone = document.querySelector('#activeOwnerPhone');
 const assembleDate = document.querySelector('#assembleDateTime');
 const assembleLocation = document.querySelector('#assembleLocation');
 
-function submitActivity () {
+function checkActivity () {
     if (activityName.value === "") {
         window.alert('請輸入活動名稱！');
-        console.log(activityName.value);
+
     } else if (activityLocationFilter.value === "選擇海灘分段") {
         window.alert('請選擇淨灘海岸！');
-        console.log(activityLocationFilter.value);
+
     } else if (activityDescription.value === "") {
         window.alert('請輸入淨灘活動相關敘述！');
-        console.log(activityDescription.value);
+
     } else if (activityOwner.value === "") {
         window.alert('請輸入淨灘活動聯絡人！');
-        console.log(activityOwner.value);
+
     } else if (activityOwnerPhone.value === "") {
         window.alert('請輸入淨灘活動聯絡人電話！');
-        console.log(activityOwnerPhone.value);
+
     } else if (assembleDate.value === "") {
         window.alert('請輸入淨灘活動日期！');
-        console.log(assembleDate.value);
+
     } else if (assembleLocation.value === "") {
         window.alert('請輸入淨灘集合地點！');
-        console.log(assembleLocation.value);
+
+    } else {
+        submitActivity();
     }
 }
 
+function submitActivity () {
+    console.log('submit');
+}

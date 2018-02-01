@@ -131,7 +131,7 @@ function uploadToServer(url) {
             console.log(response.result);
             $.unblockUI();
             window.alert('上傳成功！')
-            window.location.assign("https://hainan.oss.tw/#!index");
+            // window.location.assign("https://hainan.oss.tw/#!index");
         },
         error(jqXHR, status, errorThrown) {
             console.log(jqXHR);
