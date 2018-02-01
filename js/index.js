@@ -35,11 +35,9 @@ function logout() {
 function checkoutLogin(success) {
     const id = localStorage.getItem('id');
     if (id === null) {
-        console.log('goto');
-        window.location.assign("https://hainan-api.oss.tw/api/beach/login/facebook");
+        // window.location.assign("https://hainan-api.oss.tw/api/beach/login/facebook");
     }
     else {
-        console.log('success');
         success();
     }
 }
@@ -47,9 +45,9 @@ function checkoutLogin(success) {
 $(document).ready(() => {
     if (window.location.hash.search('id') !== -1) {
         const id = window.location.hash.split('/')[1].split('?id=')[1];
-        console.log('login success!!', 'id', id);
-
         //存 id
+        localStorage.setItem('id', id);
+
         //取 token
     }
     router.start();
