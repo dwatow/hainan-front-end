@@ -125,13 +125,13 @@ function uploadToServer(url) {
         url: 'https://hainan-api.oss.tw/api/beach/notification',
         type: 'POST',
         data: feedbackReport,
-        // dataType:'json',
+        dataType:'json',
         //handles response
         success(response) {
             console.log(response.result);
             $.unblockUI();
             window.alert('上傳成功！')
-            // window.location.assign("https://hainan.oss.tw/#!index");
+            window.location.assign("https://hainan.oss.tw/#!index");
         },
         error(jqXHR, status, errorThrown) {
             console.log(jqXHR);

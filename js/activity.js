@@ -79,7 +79,7 @@ activityLocationFilter.addEventListener('change', selectActivityPosition);
 function selectActivityPosition(event) {
     console.clear();
     let currentActivityLocation = this.value;
-    let selectActivityLocation = allBeachData.filter( function (position) {
+    let selectActivityLocation = allBeachData.filter(function (position) {
         return position.title.includes(currentActivityLocation);
     })
     activityData = selectActivityLocation[0];
@@ -87,7 +87,7 @@ function selectActivityPosition(event) {
 }
 
 const activitySubmitBotton = document.querySelector('.activitySubmit');
-activitySubmitBotton.addEventListener('click', checkActivity);
+activitySubmitBotton.addEventListener('click', submitActivity);
 
 
 const activityName = document.querySelector('#activeName');
@@ -96,8 +96,9 @@ const activityOwner = document.querySelector('#activeOwner');
 const activityOwnerPhone = document.querySelector('#activeOwnerPhone');
 const assembleDate = document.querySelector('#assembleDateTime');
 const assembleLocation = document.querySelector('#assembleLocation');
+const assembleURL = document.querySelector('#assembleURL');
 
-function checkActivity () {
+function checkActivity() {
     if (activityName.value === "") {
         window.alert('請輸入活動名稱！');
 
@@ -124,6 +125,48 @@ function checkActivity () {
     }
 }
 
-function submitActivity () {
-    console.log('submit');
+function submitActivity() {
+
+    $.blockUI({
+        message: '<h1>資料上傳中...</h1>',
+        css: {
+            border: 'none',
+            padding: '15px',
+            backgroundColor: '#000',
+            '-webkit-border-radius': '10px',
+            '-moz-border-radius': '10px',
+            opacity: .7,
+            color: '#fff'
+        }
+    });
+    let contactInfo = {name:activityOwner.value, phone:activityOwnerPhone.value}
+
+    let activityReport = {
+        "targetID": activityData.id,
+        "title": activityName.value,
+        "description": activityDescription.value,
+        "contact": JSON.stringify(contactInfo),
+        "dateTime": assembleDate.value,
+        "place": assembleLocation.value,
+        "refURL": assembleURL.value
+    }
+
+
+    $.ajax({
+        //settings
+        url: 'https://hainan-api.oss.tw/api/beach/activity',
+        type: 'POST',
+        data: activityReport,
+        dataType:'json',
+        //handles response
+        success(response) {
+            console.log(response.result);
+            $.unblockUI();
+            window.alert('上傳成功！')
+            window.location.assign("https://hainan.oss.tw/#!index");
+        },
+        error(jqXHR, status, errorThrown) {
+            console.log(jqXHR);
+        }
+    });
 }
