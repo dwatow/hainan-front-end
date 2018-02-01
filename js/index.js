@@ -1,7 +1,8 @@
 var router = new Router();
 router.add('index', () => gotoIndex())
-router.add('active', () => active.checked = true)
+router.add('active', () => gotoActive())
 router.add('feedback', () => gotoFeedback())
+router.add('logout', () => logout())
 router.setIndex('index');
 
 function gotoIndex() {
@@ -11,16 +12,43 @@ function gotoIndex() {
     })
 }
 
-function gotoFeedback() {
-    feedback.checked = true;
-    $(window).one('load', () => {
-        initReportMap();
+function gotoActive () {
+    checkoutLogin(() => {
+        active.checked = true
     })
+}
+
+function gotoFeedback() {
+
+    checkoutLogin(() => {
+        feedback.checked = true;
+        $(window).one('load', () => {
+            initReportMap();
+        })
+    })
+}
+
+function logout() {
+    //send logout api
+    localStorage.clear(); //clear id
+}
+
+function checkoutLogin(success) {
+    const id = localStorage.getItem('id');
+    if (id === null) {
+        console.log('goto');
+        window.location.assign("https://hainan-api.oss.tw/api/beach/login/facebook");
+    }
+    else {
+        console.log('success');
+        success();
+    }
 }
 
 $(document).ready(() => {
     if (window.location.hash.search('id') !== -1) {
         const id = window.location.hash.split('/')[1].split('?id=')[1];
+        console.log('login success!!', 'id', id);
 
         //存 id
         //取 token
