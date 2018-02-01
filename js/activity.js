@@ -37,7 +37,7 @@ function clearActivityBeachOption() {
     while (activityBeachFilter.childNodes[0]) {
         activityBeachFilter.removeChild(activityBeachFilter.childNodes[0]);
     }
-    activityBeachFilter.innerHTML = `<option selected disabled hidden>選擇海灘分段</option>`;
+    activityBeachFilter.innerHTML = `<option selected disabled hidden>選擇海灘名稱</option>`;
 }
 
 activityBeachFilter.addEventListener('change', addActivityLocationOption);

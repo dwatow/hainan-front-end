@@ -1,76 +1,7 @@
 //fake data
 let activityData = [];
 
-let reportData = [
-    {
-        "cityname": "臺南市", "sealinename": "黃金海岸", "coordinates": [
-            [
-                120.17607431485473,
-                22.930725534782255
-            ],
-            [
-                120.1761817932129,
-                22.92930645370021
-            ]
-        ], "clean": "是", "date": "2017/09/01"
-    },
-    {
-        "cityname": "嘉義縣", "sealinename": "東石橋畔出海口", "coordinates": [
-            [
-                120.17892956729158,
-                23.4647674172182
-            ],
-            [
-                120.17695546145661,
-                23.46342895064905
-            ],
-            [
-                120.17670470547195,
-                23.46118648719332
-            ]
-        ], "clean": "否", "date": "2017/08/02"
-    },
-    {
-        "cityname": "臺東縣", "sealinename": "豐里二號橋", "coordinates": [
-            [
-                121.10264062872375,
-                22.706256209590048
-            ],
-            [
-                121.10674144762326,
-                22.708688485720593
-            ]
-        ], "clean": "是", "date": "2017/02/03"
-    },
-    {
-        "cityname": "花蓮縣", "sealinename": "奇萊鼻至東防波", "coordinates": [
-            [
-                121.64324820041658,
-                24.018650111280472
-            ],
-            [
-                121.64339840412141,
-                24.01830221583367
-            ],
-            [
-                121.64389729499818,
-                24.017165424148576
-            ],
-            [
-                121.6445678472519,
-                24.015847321207293
-            ],
-            [
-                121.64506673812868,
-                24.014578205608412
-            ],
-            [
-                121.6451183674332,
-                24.014478783106245
-            ]
-        ], "clean": "否", "date": "2017/05/04"
-    }
-];
+let reportData = [];
 //get created Report
 $.ajax({
     url: 'https://hainan-api.oss.tw/api/beach/activity',
@@ -78,7 +9,7 @@ $.ajax({
     dataType: 'json',
     success: function (response) {
         activityData = response.result;
-        // console.log(activityData)
+        console.log(activityData)
         initIndexMap();
     },
     error: function (jqXHR, status, errorThrown) {
@@ -93,7 +24,7 @@ $.ajax({
     dataType: 'json',
     success: function (response) {
         reportData = response.result;
-        console.log(reportData);
+        // console.log(reportData);
     },
     error: function (jqXHR, status, errorThrown) {
         console.log(jqXHR);
@@ -104,7 +35,7 @@ const displayFilter = document.querySelector('#displayFilter');
 displayFilter.addEventListener('change', display);
 
 function display(event) {
-    map.setZoom(7);
+    map.setZoom(6);
     map.setCenter({ lat: 23.5, lng: 121 });
     clearResults();
     clearMarkers();
@@ -133,7 +64,7 @@ function initIndexMap() {
     //HomePage Map
     if (map === undefined) {
         map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 7,
+            zoom: 6,
             center: { lat: 23.5, lng: 121 },
             fullscreenControl: false,
             streetViewControl: false,
@@ -180,7 +111,8 @@ function dropActivityMarker() {
             activity: beach.title,
             city: beach.city,
             sealinename: beach.beachTitle,
-            date: cleanDateArray[0]
+            date: cleanDateArray[0],
+            contact:beach.contact,
         });
 
         let googleArray = [];
@@ -197,7 +129,7 @@ function dropActivityMarker() {
         });
 
         google.maps.event.addListener(markers[index], 'click', showActivityWindow);
-        setTimeout(dropMarker(index), index * 300);
+        setTimeout(dropMarker(index), index * 50);
         addResult(beach, index, markerIcon);
     });
 };
@@ -223,7 +155,8 @@ function dropReportMarker() {
             cityname: beach.city,
             sealinename: beach.beachName,
             date: feedbackDateArray[0],
-            clean: beach.beachClean
+            clean: beach.beachClean,
+            url:beach.imageURL
         });
 
         let googleArray = [];
@@ -240,7 +173,7 @@ function dropReportMarker() {
         });
 
         google.maps.event.addListener(markers[index], 'click', showReportWindow);
-        setTimeout(dropMarker(index), index * 300);
+        setTimeout(dropMarker(index), index * 50);
         addResult(beach, index, markerIcon);
     })
 };
@@ -248,7 +181,7 @@ function dropReportMarker() {
 function removeAllSealine() {
     //remove pattern
     map.data.forEach(function (feature) {
-        console.log(feature);
+        // console.log(feature);
         map.data.remove(feature);
     });
 }
@@ -311,15 +244,16 @@ function showActivityWindow(event) {
     map.setZoom(12);
     map.setCenter(marker.getPosition());
     //開啟infoWindow
-    console.log('marker', marker);
+    let contactWindow = JSON.parse(marker.contact);
+    console.log(contactWindow)
     activityInfoWindow.open(map, marker);
     document.getElementById('activity').innerHTML = `${marker.activity}`;
     document.getElementById('iw-beach').textContent = marker. sealinename;
     // document.getElementById('iw-city').textContent = marker.cityname;
     document.getElementById('iw-date').textContent = marker.date;
     // document.getElementById('iw-location').textContent = 'location';
-    document.getElementById('iw-host').textContent = '歐巴馬';
-    document.getElementById('iw-phone').textContent = '09xxxxxxxx';
+    document.getElementById('iw-host').textContent = contactWindow.name;
+    document.getElementById('iw-phone').textContent = contactWindow.phone;
     showActive({
         beach: "某個海灘",
         city: "城市",
@@ -344,7 +278,7 @@ function showReportWindow(event) {
         document.getElementById('iw-clean').textContent = "是";
     }
     
-    reportImage.style.backgroundImage = `url(https://i.imgur.com/FtsBIRx.jpg)`;
+    reportImage.style.backgroundImage = `url(${marker.url})`;
     showActive({
         beach: "某個海灘",
         city: "城市",
