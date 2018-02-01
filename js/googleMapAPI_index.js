@@ -94,7 +94,15 @@ function dropActivityMarker() {
     clearResults();
     clearMarkers();
     // console.log("dropActivityMarker")
-    activityData.forEach(function(beach, index){
+
+    let organizedActivityData = activityData.sort(function(a, b){
+        if (a.dateTime > b.dateTime) {
+            return 1;
+        }
+    })
+    // console.table(organizedactivityData)
+    
+    organizedActivityData.forEach(function(beach, index){
         let markerLetter = String.fromCharCode('A'.charCodeAt(0) + (index % 26));
         let markerIcon = `./css/GoogleMarkers/green_Marker${markerLetter}.png`;
         let coord = beach.geojson.reduce(function (accumulator, currentValue) {
@@ -138,7 +146,14 @@ function dropReportMarker() {
     removeAllSealine();
     clearResults();
     clearMarkers();
-    reportData.forEach(function(beach, index){
+
+    let organizedReportData = reportData.sort(function(a, b){
+        if (a.updateDate > b.updateDate) {
+            return 1;
+        }
+    })
+
+    organizedReportData.forEach(function(beach, index){
         let markerLetter = String.fromCharCode('A'.charCodeAt(0) + (index % 26));
         let markerIcon = `./css/GoogleMarkers/red_Marker${markerLetter}.png`;
         let coord = beach.geojson.reduce(function (accumulator, currentValue) {
