@@ -2,10 +2,10 @@ let picData;
 let reader;
 let objurl;
 const imageSelector = document.querySelector('.selectImage');
-const uploadBtn = document.querySelector('.uploadImgur');
-const imageStatus = document.querySelector('.imageStatus');
+// const uploadBtn = document.querySelector('.uploadImgur');
+// const imageStatus = document.querySelector('.imageStatus');
 const previewArea = document.querySelector('.previewArea');
-const previewTable = document.querySelector('.previewTable');
+// const previewTable = document.querySelector('.previewTable');
 
 // uploadBtn.addEventListener('click', uploadToImgur);
 imageSelector.addEventListener('change', show);
@@ -33,45 +33,108 @@ function show(event) {
         window.alert('請重新選擇小於10MB的上傳照片！');
         // console.log(imageSelector.files);
         // imageStatus.innerHTML = '請重新選擇小於10MB的上傳照片！';
-        previewArea.removeChild(previewArea.lastElementChild);
+        if (previewArea.childElementCount === 1) {
+            previewArea.removeChild(previewArea.lastElementChild);
+        }
     }
 }
 
-function uploadToImgur(event) {
+let reportBase;
+const reportSubmit = document.querySelector('.reportSubmit');
+reportSubmit.addEventListener('click', submitReport);
+
+// let testReport = {
+//     "targetID": 3,
+//     "description": "黃金海岸需要淨灘",
+//     "imageURL": "https://i.imgur.com/FZIV7sy.jpg",
+//     "isOpen": "1"
+// }
+
+function submitReport(event) {
+
     event.preventDefault();
-    const files = imageSelector.files;
-    console.log(files.length)
-    if (files.length === 1) {
-        if (picData.size < 10485760) {
-            imageStatus.innerHTML = '圖片上傳中...'
-            picData = imageSelector.files[0];
-            var form = new FormData();
-            form.append("image", picData);
+    if (feedbackLocationFilter.value !== '選擇海灘分段') {
+        const files = imageSelector.files;
+        if (files.length === 1) {
+            if (picData.size < 10485760) {
+                picData = imageSelector.files[0];
+                var form = new FormData();
+                form.append("image", picData);
 
-            var settings = {
-                async: true,
-                crossDomain: true,
-                album: "CVbLU",
-                url: "https://api.imgur.com/3/image",
-                method: "POST",
-                headers: {
-                    Authorization: "Client-ID c161fabd6a0a19f"
-                },
-                processData: false,
-                contentType: false,
-                mimeType: "multipart/form-data",
-                data: form
-            }
+                var settings = {
+                    async: true,
+                    crossDomain: true,
+                    album: "CVbLU",
+                    url: "https://api.imgur.com/3/image",
+                    method: "POST",
+                    headers: {
+                        Authorization: "Client-ID c161fabd6a0a19f"
+                    },
+                    processData: false,
+                    contentType: false,
+                    mimeType: "multipart/form-data",
+                    data: form
+                }
 
-            $.ajax(settings).done(function (response) {
-                let responseData = JSON.parse(response)['data'];
-                console.log(responseData);
-                imageStatus.innerHTML = `照片上傳成功！ <a href = ${responseData['link']} target="_blank">${responseData['link']}</a>`;
-            });
+                $.blockUI({
+                    message: '<h1>資料上傳中...</h1>',
+                    css: {
+                        border: 'none',
+                        padding: '15px',
+                        backgroundColor: '#000',
+                        '-webkit-border-radius': '10px',
+                        '-moz-border-radius': '10px',
+                        opacity: .7,
+                        color: '#fff'
+                    }
+                });
+
+                $.ajax(settings).done(function (response) {
+                    let responseData = JSON.parse(response)['data'];
+                    let url = responseData.link;
+                    uploadToServer(url);
+                });
+            } else {
+                window.alert('請重新選擇小於10MB的上傳照片！');
+            };
         } else {
-            window.alert('請重新選擇小於10MB的上傳照片！');
-        };
+            window.alert('請先選擇照片！');
+        }
     } else {
-        window.alert('請先選擇照片！');
+        window.alert('請先選擇回報地點！')
     }
+
+}
+
+const feedbackDescription = document.querySelector('#feedbackDescription');
+
+function uploadToServer(url) {
+    let cleanStatus = document.querySelector('input[name="cleanRequire"]:checked').value;
+
+    let feedbackReport = {
+        "targetID": feedbackData.id,
+        "description": feedbackDescription.value,
+        "imageURL": url,
+        "beachClean": cleanStatus,
+    }
+
+    console.table(feedbackReport)
+
+    $.ajax({
+        //settings
+        url: 'https://hainan-api.oss.tw/api/beach/notification',
+        type: 'POST',
+        data: feedbackReport,
+        // dataType:'json',
+        //handles response
+        success(response) {
+            console.log(response.result);
+            $.unblockUI();
+            window.alert('上傳成功！')
+            window.location.assign("https://hainan.oss.tw/#!index");
+        },
+        error(jqXHR, status, errorThrown) {
+            console.log(jqXHR);
+        }
+    });
 }

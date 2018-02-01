@@ -131,8 +131,40 @@
                     <input type="text" class="form-control" id="activeName" placeholder="為你的活動取個名字">
                 </div>
                 <div class="form-group">
-                    <label for="activeLocation">海灘名稱</label>
-                    <input type="text" class="form-control" id="activeLocation" placeholder="要淨哪一個海灘">
+                    <label for="activeLocation"> 選取海灘</label>
+                    <select id="activityCity" class="form-control" name="city">
+                        <option selected disabled hidden>選擇城市</option>
+                        <option value="新北市">新北市</option>
+                        <option value="基隆市">基隆市</option>
+                        <option value="桃園市">桃園市</option>
+                        <option value="新竹縣">新竹縣</option>
+                        <option value="新竹市">新竹市</option>
+                        <option value="苗栗縣">苗栗縣</option>
+                        <option value="臺中市">臺中市</option>
+                        <option value="彰化縣">彰化縣</option>
+                        <option value="雲林縣">雲林縣</option>
+                        <option value="嘉義縣">嘉義縣</option>
+                        <option value="臺南市">臺南市</option>
+                        <option value="高雄市">高雄市</option>
+                        <option value="屏東縣">屏東縣</option>
+                        <option value="宜蘭縣">宜蘭縣</option>
+                        <option value="花蓮縣">花蓮縣</option>
+                        <option value="臺東縣">臺東縣</option>
+                        <option value="澎湖縣">澎湖縣</option>
+                        <option value="金門縣">金門縣</option>
+                        <option value="連江縣">連江縣</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select id="activityBeach" class="form-control" name="beach">
+                        <option selected disabled hidden>選擇海灘名稱</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select id="activityLocation" class="form-control" name="beach">
+                        <option selected disabled hidden>選擇海灘分段</option>
+                    </select>
+                </div>
                 </div>
                 <div class="form-group">
                     <label for="activeDescription">活動介紹文字</label>
@@ -145,21 +177,21 @@
                     </div>
                     <div class="col-12 col-sm-6">
                         <label for="activeOwnerPhone">聯絡電話</label>
-                        <input type="text" class="form-control" id="activeOwnerPhone" placeholder="Last name">
+                        <input type="text" class="form-control" id="activeOwnerPhone" placeholder="聯絡人的電話">
                     </div>
                 </div>
                 <div class="form-group form-row">
                     <div class="col-12 col-sm-6">
                         <label for="assembleDateTime">活動時間</label>
-                        <input type="text" class="form-control" id="assembleDateTime" placeholder="Last name">
+                        <input type="text" class="form-control" id="assembleDateTime" placeholder="淨灘活動的時間">
                     </div>
                     <div class="col-12 col-sm-6">
                         <label for="assembleLocation">集合地點</label>
-                        <input type="text" class="form-control" id="assembleLocation" placeholder="聯絡人的名稱或稱呼">
+                        <input type="text" class="form-control" id="assembleLocation" placeholder="淨灘活動的集合地點">
                     </div>
                 </div>
                 <div class="form-group">
-                    <button type="button" class="btn btn-primary ml-auto d-block">送出</button>
+                    <button type="button" class="btn btn-primary ml-auto d-block activitySubmit">送出</button>
                 </div>
             </form>
         </article>
@@ -208,17 +240,17 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="activeDescription">活動介紹文字</label>
-                            <textarea class="form-control" id="activeDescription" rows="3"></textarea>
+                            <label for="feedbackDescription">活動介紹文字</label>
+                            <textarea class="form-control" id="feedbackDescription" rows="3"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="activeDescription">需要淨灘</label>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="feedbackForActiveYes" value="true" name = "cleanRequire">
+                                <input class="form-check-input" type="radio" id="feedbackForActiveYes" value="true" name = "cleanRequire" >
                                 <label class="form-check-label" for="feedbackForActiveYes">是</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="feedbackForActiveNo" value="false" name = "cleanRequire">
+                                <input class="form-check-input" type="radio" id="feedbackForActiveNo" value="false" name = "cleanRequire" checked>
                                 <label class="form-check-label" for="feedbackForActiveNo">否</label>
                             </div>
                         </div>
@@ -254,6 +286,7 @@
         <script src="./js/getBrowser.js"></script>
         <script src="./js/router.js"></script>
         <script src="./js/index.js"></script>
+        <script src="./js/activity.js"></script>
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCT0r1YOriUdRU0rtYZlfH3fRQXHqvsukY"></script>
     </body>
 

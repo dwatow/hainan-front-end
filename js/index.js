@@ -3,7 +3,6 @@ router.add('index', () => gotoIndex())
 router.add('active', () => gotoActive())
 router.add('feedback', () => gotoFeedback())
 router.add('logout', () => logout())
-router.setIndex('index');
 
 function gotoIndex() {
     index.checked = true;
