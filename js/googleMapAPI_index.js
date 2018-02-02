@@ -9,7 +9,7 @@ $.ajax({
     dataType: 'json',
     success: function (response) {
         activityData = response.result;
-        console.log(activityData)
+        // console.log(activityData)
         initIndexMap();
     },
     error: function (jqXHR, status, errorThrown) {
@@ -24,7 +24,7 @@ $.ajax({
     dataType: 'json',
     success: function (response) {
         reportData = response.result;
-        // console.log(reportData);
+        console.log(reportData);
     },
     error: function (jqXHR, status, errorThrown) {
         console.log(jqXHR);
@@ -133,7 +133,7 @@ function dropActivityMarker() {
         map.data.add(dataFeature);
         map.data.setStyle({
             strokeWeight: 12,
-            strokeColor: 'GREEN',
+            strokeColor: 'green',
         });
 
         google.maps.event.addListener(markers[index], 'click', showActivityWindow);
@@ -152,10 +152,21 @@ function dropReportMarker() {
             return 1;
         }
     })
-
+    
     organizedReportData.forEach(function(beach, index){
         let markerLetter = String.fromCharCode('A'.charCodeAt(0) + (index % 26));
-        let markerIcon = `./css/GoogleMarkers/red_Marker${markerLetter}.png`;
+        let lineColor = true;
+
+        if (beach.beachClean === true) {
+            var markerIcon = `./css/GoogleMarkers/red_Marker${markerLetter}.png`;
+            lineColor = true;
+        } else {
+            var markerIcon = `./css/GoogleMarkers/blue_Marker${markerLetter}.png`;
+            lineColor = false;
+        }
+
+        // console.log(markerIcon)
+        
         let coord = beach.geojson.reduce(function (accumulator, currentValue) {
             // console.log(accumulator, currentValue)
             return [(accumulator[0]) + (currentValue[0]) / beach.geojson.length, (accumulator[1]) + (currentValue[1]) / beach.geojson.length];
@@ -180,11 +191,24 @@ function dropReportMarker() {
             googleArray.push(coordObj);
         });
         dataFeature = { geometry: new google.maps.Data.MultiLineString([googleArray]) };
+        
 
         map.data.add(dataFeature);
-        map.data.setStyle({
-            strokeWeight: 12,
-            strokeColor: 'Red',
+        map.data.setStyle(function(dataFeature) {
+            var color;
+            if(lineColor) {
+              color = 'red';
+              console.log(color);
+            //   colorSwitch = false;
+            } else {
+              color = 'blue';
+              console.log(color);
+            //   colorSwitch = true;
+            }
+            return {
+                strokeWeight: 12,
+                strokeColor: color,
+            }
         });
 
         google.maps.event.addListener(markers[index], 'click', showReportWindow);
