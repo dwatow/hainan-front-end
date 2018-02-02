@@ -6,9 +6,9 @@ router.add('logout', () => logout())
 
 function gotoIndex() {
     index.checked = true;
-    $(window).one('load', () => {
-        initIndexMap();
-    })
+    // $(window).one('load', () => {
+    //     initIndexMap();
+    // })
 }
 
 function gotoActive () {
@@ -38,8 +38,11 @@ function checkoutLogin(success) {
         // window.location.assign("https://hainan-api.oss.tw/api/beach/login/facebook");
     }
     else {
-        success();
+        // check login ok then add
+        // success();
     }
+    // check login ok then remove
+    success();
 }
 
 $(document).ready(() => {

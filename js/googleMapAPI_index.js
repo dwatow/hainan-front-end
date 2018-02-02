@@ -60,7 +60,7 @@ let map;
 let activityInfoWindow;
 let reportInfoWindow;
 function initIndexMap() {
-    // console.log('initMap Success')
+    console.log('initMap Success')
     //HomePage Map
     if (map === undefined) {
         map = new google.maps.Map(document.getElementById('map'), {
