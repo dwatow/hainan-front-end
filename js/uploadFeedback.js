@@ -53,58 +53,113 @@ reportSubmit.addEventListener('click', submitReport);
 function submitReport(event) {
 
     event.preventDefault();
-    if (feedbackLocationFilter.value !== '選擇海灘分段') {
-        const files = imageSelector.files;
-        if (files.length === 1) {
-            if (picData.size < 10485760) {
-                picData = imageSelector.files[0];
-                var form = new FormData();
-                form.append("image", picData);
+    let files = imageSelector.files;
 
-                var settings = {
-                    async: true,
-                    crossDomain: true,
-                    album: "CVbLU",
-                    url: "https://api.imgur.com/3/image",
-                    method: "POST",
-                    headers: {
-                        Authorization: "Client-ID c161fabd6a0a19f"
-                    },
-                    processData: false,
-                    contentType: false,
-                    mimeType: "multipart/form-data",
-                    data: form
-                }
-
-                $.blockUI({
-                    message: '<h1>資料上傳中...</h1>',
-                    css: {
-                        border: 'none',
-                        padding: '15px',
-                        backgroundColor: '#000',
-                        '-webkit-border-radius': '10px',
-                        '-moz-border-radius': '10px',
-                        opacity: .7,
-                        color: '#fff'
-                    }
-                });
-
-                $.ajax(settings).done(function (response) {
-                    let responseData = JSON.parse(response)['data'];
-                    let url = responseData.link;
-                    uploadToServer(url);
-                });
-            } else {
-                window.alert('請重新選擇小於10MB的上傳照片！');
-            };
-        } else {
-            window.alert('請先選擇照片！');
-        }
+    if (feedbackLocationFilter.value === '選擇海灘分段') {
+        window.alert('請先選擇回報地點！');
+    } else if (files.length < 1) {
+        window.alert('請先選擇照片！');
+    } else if (picData.size > 10485760) {
+        window.alert('請重新選擇小於10MB的上傳照片！');
     } else {
-        window.alert('請先選擇回報地點！')
-    }
+        let feedbackConfirm = confirm("確認送出該回報？");
+        if (feedbackConfirm === true) {
+            picData = imageSelector.files[0];
+            var form = new FormData();
+            form.append("image", picData);
 
+            var settings = {
+                async: true,
+                crossDomain: true,
+                album: "CVbLU",
+                url: "https://api.imgur.com/3/image",
+                method: "POST",
+                headers: {
+                    Authorization: "Client-ID c161fabd6a0a19f"
+                },
+                processData: false,
+                contentType: false,
+                mimeType: "multipart/form-data",
+                data: form
+            }
+
+            $.blockUI({
+                message: '<h1>資料上傳中...</h1>',
+                css: {
+                    border: 'none',
+                    padding: '15px',
+                    backgroundColor: '#000',
+                    '-webkit-border-radius': '10px',
+                    '-moz-border-radius': '10px',
+                    opacity: .7,
+                    color: '#fff'
+                }
+            });
+
+            $.ajax(settings).done(function (response) {
+                let responseData = JSON.parse(response)['data'];
+                let url = responseData.link;
+                uploadToServer(url);
+            });
+        } else {
+            window.alert("請再次確認回報內容後送出！")
+        }
+    }
 }
+
+
+//     if (feedbackLocationFilter.value !== '選擇海灘分段') {
+//         let files = imageSelector.files;
+//         if (files.length === 1) {
+//             if (picData.size < 10485760) {
+//                 picData = imageSelector.files[0];
+//                 var form = new FormData();
+//                 form.append("image", picData);
+
+//                 var settings = {
+//                     async: true,
+//                     crossDomain: true,
+//                     album: "CVbLU",
+//                     url: "https://api.imgur.com/3/image",
+//                     method: "POST",
+//                     headers: {
+//                         Authorization: "Client-ID c161fabd6a0a19f"
+//                     },
+//                     processData: false,
+//                     contentType: false,
+//                     mimeType: "multipart/form-data",
+//                     data: form
+//                 }
+
+//                 $.blockUI({
+//                     message: '<h1>資料上傳中...</h1>',
+//                     css: {
+//                         border: 'none',
+//                         padding: '15px',
+//                         backgroundColor: '#000',
+//                         '-webkit-border-radius': '10px',
+//                         '-moz-border-radius': '10px',
+//                         opacity: .7,
+//                         color: '#fff'
+//                     }
+//                 });
+
+//                 $.ajax(settings).done(function (response) {
+//                     let responseData = JSON.parse(response)['data'];
+//                     let url = responseData.link;
+//                     uploadToServer(url);
+//                 });
+//             } else {
+//                 window.alert('請重新選擇小於10MB的上傳照片！');
+//             };
+//         } else {
+//             window.alert('請先選擇照片！');
+//         }
+//     } else {
+//         window.alert('請先選擇回報地點！')
+//     }
+
+// }
 
 const feedbackDescription = document.querySelector('#feedbackDescription');
 
@@ -125,7 +180,7 @@ function uploadToServer(url) {
         url: 'https://hainan-api.oss.tw/api/beach/notification',
         type: 'POST',
         data: feedbackReport,
-        dataType:'json',
+        dataType: 'json',
         //handles response
         success(response) {
             console.log(response.result);

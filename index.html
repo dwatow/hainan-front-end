@@ -1,297 +1,304 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>乾淨海灘孵化器</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="./css/index.css">
-        <link rel="stylesheet" href="./css/googleMap_index.css">
-        <link rel="stylesheet" href="./css/googleMap_feedback.css">
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>乾淨海灘孵化器</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/activity.css">
+    <link rel="stylesheet" href="./css/googleMap_index.css">
+    <link rel="stylesheet" href="./css/googleMap_feedback.css">
+</head>
 
-    <body>
-        <header class="container-fluid view-area">
-            <div class="banner">
-                <img src="https://picsum.photos/1366/400/?gravity=center" alt="" class="img-fluid d-block">
-            </div>
-        </header>
-        <input type="radio" name="nav" id="index" checked>
-        <input type="radio" name="nav" id="active">
-        <input type="radio" name="nav" id="feedback">
+<body>
+    <header class="container-fluid view-area">
+        <div class="banner">
+            <img src="https://picsum.photos/1366/400/?gravity=center" alt="" class="img-fluid d-block">
+        </div>
+    </header>
+    <input type="radio" name="nav" id="index" checked>
+    <input type="radio" name="nav" id="active">
+    <input type="radio" name="nav" id="feedback">
 
-        <nav class="container-fluid view-area navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">淨灘系統</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <nav class="container-fluid view-area navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">淨灘系統</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+            aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link indexPage" href="#!index">首頁</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link activityPage" href="#!active">淨灘活動</a>
-                    </li>
-                    <li class="nav-item feedbackPage">
-                        <a class="nav-link" href="#!feedback">回報海灘狀況</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link indexPage" href="#!index">首頁</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link activityPage" href="#!active">淨灘活動</a>
+                </li>
+                <li class="nav-item feedbackPage">
+                    <a class="nav-link" href="#!feedback">回報海灘狀況</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
-        <article class="container-fluid view-area" data-section="index">
-            <div class="filter">
-                <label id="filterLabel">目前顯示：</label>
-                <select id="displayFilter" name="display">
+    <article class="container-fluid view-area" data-section="index">
+        <div class="filter">
+            <label id="filterLabel">目前顯示：</label>
+            <select id="displayFilter" name="display">
                 <option value="activities" selected>近期活動</option>
                 <option value="reports">累積回報</option>
             </select>
+        </div>
+        <div class='row no-gutters'>
+            <div class="mapContainer col-12">
+                <div id="map"></div>
             </div>
-            <div class='row no-gutters'>
-                <div class="mapContainer col-12">
-                    <div id="map"></div>
-                </div>
-                <input type="checkbox" id="mapsList">
-                <div class="listContainer col-6">
-                    <label for="mapsList" class="mapsListBars">
+            <input type="checkbox" id="mapsList">
+            <div class="listContainer col-6">
+                <label for="mapsList" class="mapsListBars">
                     <i class="fa fa-bars"></i>
                 </label>
-                    <div id="listing">
-                        <table id="resultsTable" class="table table-hover">
-                            <tbody id="results"></tbody>
-                        </table>
-                    </div>
+                <div id="listing">
+                    <table id="resultsTable" class="table table-hover">
+                        <tbody id="results"></tbody>
+                    </table>
                 </div>
-                <div class="col-12" id="activeDetail"></div>
             </div>
+            <div class="col-12" id="activeDetail"></div>
+        </div>
 
-            <div style="display: none">
-                <div id="activity-info-content">
-                    <table>
-                        <p id='activity'></p>
-                        <tr id="iw-address-row" class="iw_table_row">
-                            <td class="iw_attribute_name">海灘名稱: </td>
-                            <td id="iw-beach"></td>
-                        </tr>
-                        <!-- <tr id="iw-phone-row" class="iw_table_row">
+        <div style="display: none">
+            <div id="activity-info-content">
+                <table>
+                    <p id='activity'></p>
+                    <tr id="iw-address-row" class="iw_table_row">
+                        <td class="iw_attribute_name">海灘名稱: </td>
+                        <td id="iw-beach"></td>
+                    </tr>
+                    <!-- <tr id="iw-phone-row" class="iw_table_row">
                         <td class="iw_attribute_name">縣市: </td>
                         <td id="iw-city"></td>
                     </tr> -->
-                        <tr id="iw-rating-row" class="iw_table_row">
-                            <td class="iw_attribute_name">活動日期: </td>
-                            <td id="iw-date"></td>
-                        </tr>
-                        <!-- <tr id="iw-rating-row" class="iw_table_row">
+                    <tr id="iw-rating-row" class="iw_table_row">
+                        <td class="iw_attribute_name">活動日期: </td>
+                        <td id="iw-date"></td>
+                    </tr>
+                    <!-- <tr id="iw-rating-row" class="iw_table_row">
                         <td class="iw_attribute_name">集合地點: </td>
                         <td id="iw-location"></td>
                     </tr> -->
-                        <tr id="iw-website-row" class="iw_table_row">
-                            <td class="iw_attribute_name">聯絡人: </td>
-                            <td id="iw-host"></td>
-                        </tr>
-                        <tr id="iw-website-row" class="iw_table_row">
-                            <td class="iw_attribute_name">聯絡電話: </td>
-                            <td id="iw-phone"></td>
-                        </tr>
-                    </table>
+                    <tr id="iw-website-row" class="iw_table_row">
+                        <td class="iw_attribute_name">聯絡人: </td>
+                        <td id="iw-host"></td>
+                    </tr>
+                    <tr id="iw-website-row" class="iw_table_row">
+                        <td class="iw_attribute_name">聯絡電話: </td>
+                        <td id="iw-phone"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div style="display: none">
+            <div id="report-info-content">
+                <table>
+                    <p id='report'></p>
+                    <tr id="iw-address-row" class="iw_table_row">
+                        <td class="iw_attribute_name">回報日期: </td>
+                        <td id="iw-reportDate"></td>
+                    </tr>
+                    <tr id="iw-phone-row" class="iw_table_row">
+                        <td class="iw_attribute_name">淨灘需求: </td>
+                        <td id="iw-clean"></td>
+                    </tr>
+                    <tr id="iw-rating-row" class="iw_table_row">
+                        <td class="iw_attribute_name">回報照片: </td>
+                        <td id="iw-image">
+                            <div class="reportImage">
+                        </td>
+                    </tr>
+                </table>
                 </div>
             </div>
-
-            <div style="display: none">
-                <div id="report-info-content">
-                    <table>
-                        <p id='report'></p>
-                        <tr id="iw-address-row" class="iw_table_row">
-                            <td class="iw_attribute_name">回報日期: </td>
-                            <td id="iw-reportDate"></td>
-                        </tr>
-                        <tr id="iw-phone-row" class="iw_table_row">
-                            <td class="iw_attribute_name">淨灘需求: </td>
-                            <td id="iw-clean"></td>
-                        </tr>
-                        <tr id="iw-rating-row" class="iw_table_row">
-                            <td class="iw_attribute_name">回報照片: </td>
-                            <td id="iw-image">
-                                <div class="reportImage">
-                            </td>
-                        </tr>
-                    </table>
-                    </div>
+        </div>
+    </article>
+    <article class="container-fluid view-area" data-section="active">
+        <form class="createActive" action="index.html" method="post">
+            <div class="form-group">
+                <label for="activeName">活動名稱</label>
+                <input type="text" class="form-control" id="activeName" placeholder="為你的活動取個名字">
+            </div>
+            <div class="form-group">
+                <label for="activeLocation"> 選取海灘</label>
+                <select id="activityCity" class="form-control" name="city">
+                    <option selected disabled hidden>選擇城市</option>
+                    <option value="新北市">新北市</option>
+                    <option value="基隆市">基隆市</option>
+                    <option value="桃園市">桃園市</option>
+                    <option value="新竹縣">新竹縣</option>
+                    <option value="新竹市">新竹市</option>
+                    <option value="苗栗縣">苗栗縣</option>
+                    <option value="臺中市">臺中市</option>
+                    <option value="彰化縣">彰化縣</option>
+                    <option value="雲林縣">雲林縣</option>
+                    <option value="嘉義縣">嘉義縣</option>
+                    <option value="臺南市">臺南市</option>
+                    <option value="高雄市">高雄市</option>
+                    <option value="屏東縣">屏東縣</option>
+                    <option value="宜蘭縣">宜蘭縣</option>
+                    <option value="花蓮縣">花蓮縣</option>
+                    <option value="臺東縣">臺東縣</option>
+                    <option value="澎湖縣">澎湖縣</option>
+                    <option value="金門縣">金門縣</option>
+                    <option value="連江縣">連江縣</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <select id="activityBeach" class="form-control" name="beach">
+                    <option selected disabled hidden>選擇海灘名稱</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <select id="activityLocation" class="form-control" name="beach">
+                    <option selected disabled hidden>選擇海灘分段</option>
+                </select>
+            </div>
+            </div>
+            <div class="form-group">
+                <label for="activeDescription">活動介紹文字</label>
+                <textarea class="form-control" id="activeDescription" rows="3"></textarea>
+            </div>
+            <div class="form-group form-row">
+                <div class="col-12 col-sm-6">
+                    <label for="activeOwner">聯絡人</label>
+                    <input type="text" class="form-control" id="activeOwner" placeholder="聯絡人的名稱或稱呼">
+                </div>
+                <div class="col-12 col-sm-6">
+                    <label for="activeOwnerPhone">聯絡電話</label>
+                    <input type="text" class="form-control" id="activeOwnerPhone" placeholder="聯絡人的電話">
                 </div>
             </div>
-        </article>
-        <article class="container-fluid view-area" data-section="active">
-            <form class="createActive" action="index.html" method="post">
-                <div class="form-group">
-                    <label for="activeName">活動名稱</label>
-                    <input type="text" class="form-control" id="activeName" placeholder="為你的活動取個名字">
+            <div class="form-group form-row">
+                <div class="col-12 col-sm-6">
+                    <label for="assembleDateTime">活動時間</label>
+                    <input type="date" class="form-control" id="assembleDateTime" placeholder="淨灘活動的時間">
                 </div>
-                <div class="form-group">
-                    <label for="activeLocation"> 選取海灘</label>
-                    <select id="activityCity" class="form-control" name="city">
-                        <option selected disabled hidden>選擇城市</option>
-                        <option value="新北市">新北市</option>
-                        <option value="基隆市">基隆市</option>
-                        <option value="桃園市">桃園市</option>
-                        <option value="新竹縣">新竹縣</option>
-                        <option value="新竹市">新竹市</option>
-                        <option value="苗栗縣">苗栗縣</option>
-                        <option value="臺中市">臺中市</option>
-                        <option value="彰化縣">彰化縣</option>
-                        <option value="雲林縣">雲林縣</option>
-                        <option value="嘉義縣">嘉義縣</option>
-                        <option value="臺南市">臺南市</option>
-                        <option value="高雄市">高雄市</option>
-                        <option value="屏東縣">屏東縣</option>
-                        <option value="宜蘭縣">宜蘭縣</option>
-                        <option value="花蓮縣">花蓮縣</option>
-                        <option value="臺東縣">臺東縣</option>
-                        <option value="澎湖縣">澎湖縣</option>
-                        <option value="金門縣">金門縣</option>
-                        <option value="連江縣">連江縣</option>
-                    </select>
+                <div class="col-12 col-sm-6">
+                    <label for="assembleLocation">集合地點</label>
+                    <input type="text" class="form-control" id="assembleLocation" placeholder="淨灘活動的集合地點">
                 </div>
-                <div class="form-group">
-                    <select id="activityBeach" class="form-control" name="beach">
-                        <option selected disabled hidden>選擇海灘名稱</option>
-                    </select>
+                <div class="col-12 col-sm-12">
+                    <label for="assembleURL">活動頁面</label>
+                    <input type="text" class="form-control" id="assembleURL" placeholder="可輸入外部活動連結">
                 </div>
-                <div class="form-group">
-                    <select id="activityLocation" class="form-control" name="beach">
-                        <option selected disabled hidden>選擇海灘分段</option>
-                    </select>
-                </div>
-                </div>
-                <div class="form-group">
-                    <label for="activeDescription">活動介紹文字</label>
-                    <textarea class="form-control" id="activeDescription" rows="3"></textarea>
-                </div>
-                <div class="form-group form-row">
-                    <div class="col-12 col-sm-6">
-                        <label for="activeOwner">聯絡人</label>
-                        <input type="text" class="form-control" id="activeOwner" placeholder="聯絡人的名稱或稱呼">
-                    </div>
-                    <div class="col-12 col-sm-6">
-                        <label for="activeOwnerPhone">聯絡電話</label>
-                        <input type="text" class="form-control" id="activeOwnerPhone" placeholder="聯絡人的電話">
-                    </div>
-                </div>
-                <div class="form-group form-row">
-                    <div class="col-12 col-sm-6">
-                        <label for="assembleDateTime">活動時間</label>
-                        <input type="date" class="form-control" id="assembleDateTime" placeholder="淨灘活動的時間">
-                    </div>
-                    <div class="col-12 col-sm-6">
-                        <label for="assembleLocation">集合地點</label>
-                        <input type="text" class="form-control" id="assembleLocation" placeholder="淨灘活動的集合地點">
-                    </div>
-                    <div class="col-12 col-sm-12">
-                        <label for="assembleURL">活動頁面</label>
-                        <input type="text" class="form-control" id="assembleURL" placeholder="可輸入外部活動連結">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <button type="button" class="btn btn-primary ml-auto d-block activitySubmit">送出</button>
-                </div>
-            </form>
-        </article>
-        <article class="container-fluid view-area" data-section="feedback">
-            <div class="row">
-                <div class="reportMapContainer col-md-6 col-sm-12">
-                    <div id="reportMap"></div>
-                </div>
-                <div class="reportFormContainer col-md-6 col-sm-12">
-                    <form class="createFeedback" action="index.html" method="post">
-                        <div class="form-group">
-                            <div class="form-group">
-                                <label for="feedbackLocation">通報哪個海灘?</label>
-                                <select id="feedbackCity" class="form-control" name="city">
-                                    <option selected disabled hidden>選擇城市</option>
-                                    <option value="新北市">新北市</option>
-                                    <option value="基隆市">基隆市</option>
-                                    <option value="桃園市">桃園市</option>
-                                    <option value="新竹縣">新竹縣</option>
-                                    <option value="新竹市">新竹市</option>
-                                    <option value="苗栗縣">苗栗縣</option>
-                                    <option value="臺中市">臺中市</option>
-                                    <option value="彰化縣">彰化縣</option>
-                                    <option value="雲林縣">雲林縣</option>
-                                    <option value="嘉義縣">嘉義縣</option>
-                                    <option value="臺南市">臺南市</option>
-                                    <option value="高雄市">高雄市</option>
-                                    <option value="屏東縣">屏東縣</option>
-                                    <option value="宜蘭縣">宜蘭縣</option>
-                                    <option value="花蓮縣">花蓮縣</option>
-                                    <option value="臺東縣">臺東縣</option>
-                                    <option value="澎湖縣">澎湖縣</option>
-                                    <option value="金門縣">金門縣</option>
-                                    <option value="連江縣">連江縣</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <select id="feedbackBeach" class="form-control" name="beach">
-                                    <option selected disabled hidden>選擇海灘名稱</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <select id="feedbackLocation" class="form-control" name="beach">
-                                    <option selected disabled hidden>選擇海灘分段</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="feedbackDescription">活動介紹文字</label>
-                            <textarea class="form-control" id="feedbackDescription" rows="3"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="activeDescription">需要淨灘</label>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="feedbackForActiveYes" value="true" name = "cleanRequire" >
-                                <label class="form-check-label" for="feedbackForActiveYes">是</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="feedbackForActiveNo" value="false" name = "cleanRequire" checked>
-                                <label class="form-check-label" for="feedbackForActiveNo">否</label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class='controller'>
-                                <input type='file' accept="image/*" class='selectImage' required>
-                                <!-- <button class="uploadImgur">上傳圖片</button> -->
-                            </div>
-
-                            <div class='previewTable'>
-                                <!-- <p class='imageStatus'>請選擇要上傳的圖片</p> -->
-                                <div class='previewArea'></div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <button type="button" class="btn btn-primary ml-auto d-block reportSubmit">送出</button>
-                        </div>
-                    </form>
-                </div>
-
             </div>
-        </article>
-        <footer class="container-fluid">
-            2018 - 海南機團隊
-        </footer>
-        <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-        <script src="./js/jquery.blockUI.js"></script>
-        <script src="./js/uploadFeedback.js"></script>
-        <script src="./js/googleMapAPI_index.js"></script>
-        <script src="./js/googleMapAPI_feedback.js"></script>
-        <script src="./js/getBrowser.js"></script>
-        <script src="./js/router.js"></script>
-        <script src="./js/index.js"></script>
-        <script src="./js/activity.js"></script>
-        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCT0r1YOriUdRU0rtYZlfH3fRQXHqvsukY"></script>
-    </body>
+            <div class="form-group activityBtns">
+                <button type="button" class="btn btn-danger ml-auto activityDelete">刪除活動</button>
+                <button type="button" class="btn btn-primary ml-auto activityModify">修改活動</button>
+                <button type="button" class="btn btn-success ml-auto activitySubmit">新增活動</button>
+            </div>
+        </form>
+    </article>
+    <article class="container-fluid view-area" data-section="feedback">
+        <div class="row">
+            <div class="reportMapContainer col-md-6 col-sm-12">
+                <div id="reportMap"></div>
+            </div>
+            <div class="reportFormContainer col-md-6 col-sm-12">
+                <form class="createFeedback" action="index.html" method="post">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label for="feedbackLocation">通報哪個海灘?</label>
+                            <select id="feedbackCity" class="form-control" name="city">
+                                <option selected disabled hidden>選擇城市</option>
+                                <option value="新北市">新北市</option>
+                                <option value="基隆市">基隆市</option>
+                                <option value="桃園市">桃園市</option>
+                                <option value="新竹縣">新竹縣</option>
+                                <option value="新竹市">新竹市</option>
+                                <option value="苗栗縣">苗栗縣</option>
+                                <option value="臺中市">臺中市</option>
+                                <option value="彰化縣">彰化縣</option>
+                                <option value="雲林縣">雲林縣</option>
+                                <option value="嘉義縣">嘉義縣</option>
+                                <option value="臺南市">臺南市</option>
+                                <option value="高雄市">高雄市</option>
+                                <option value="屏東縣">屏東縣</option>
+                                <option value="宜蘭縣">宜蘭縣</option>
+                                <option value="花蓮縣">花蓮縣</option>
+                                <option value="臺東縣">臺東縣</option>
+                                <option value="澎湖縣">澎湖縣</option>
+                                <option value="金門縣">金門縣</option>
+                                <option value="連江縣">連江縣</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select id="feedbackBeach" class="form-control" name="beach">
+                                <option selected disabled hidden>選擇海灘名稱</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select id="feedbackLocation" class="form-control" name="beach">
+                                <option selected disabled hidden>選擇海灘分段</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="feedbackDescription">活動介紹文字</label>
+                        <textarea class="form-control" id="feedbackDescription" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="activeDescription">需要淨灘</label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="feedbackForActiveYes" value="true" name="cleanRequire">
+                            <label class="form-check-label" for="feedbackForActiveYes">是</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="feedbackForActiveNo" value="false" name="cleanRequire" checked>
+                            <label class="form-check-label" for="feedbackForActiveNo">否</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class='controller'>
+                            <input type='file' accept="image/*" class='selectImage' required>
+                            <!-- <button class="uploadImgur">上傳圖片</button> -->
+                        </div>
+
+                        <div class='previewTable'>
+                            <!-- <p class='imageStatus'>請選擇要上傳的圖片</p> -->
+                            <div class='previewArea'></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary ml-auto d-block reportSubmit">送出回報</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </article>
+    <footer class="container-fluid">
+        2018 - 海南機團隊
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="./js/jquery.blockUI.js"></script>
+    <script src="./js/uploadFeedback.js"></script>
+    <script src="./js/googleMapAPI_index.js"></script>
+    <script src="./js/googleMapAPI_feedback.js"></script>
+    <script src="./js/getBrowser.js"></script>
+    <script src="./js/router.js"></script>
+    <script src="./js/index.js"></script>
+    <script src="./js/activity.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCT0r1YOriUdRU0rtYZlfH3fRQXHqvsukY"></script>
+</body>
 
 </html>

@@ -87,7 +87,7 @@ function selectActivityPosition(event) {
 }
 
 const activitySubmitBotton = document.querySelector('.activitySubmit');
-activitySubmitBotton.addEventListener('click', submitActivity);
+activitySubmitBotton.addEventListener('click', checkActivity);
 
 
 const activityName = document.querySelector('#activeName');
@@ -121,14 +121,19 @@ function checkActivity() {
         window.alert('請輸入淨灘集合地點！');
 
     } else {
-        submitActivity();
+        let addActivityConfirm = confirm("確認發起新活動？");
+        if (addActivityConfirm === true) {
+            submitActivity();
+        } else {
+            window.alert('請再次確認活動資訊後送出！')
+        }
     }
 }
 
 function submitActivity() {
 
     $.blockUI({
-        message: '<h1>資料上傳中...</h1>',
+        message: '<h5>資料上傳中...</h5>',
         css: {
             border: 'none',
             padding: '15px',
@@ -136,7 +141,9 @@ function submitActivity() {
             '-webkit-border-radius': '10px',
             '-moz-border-radius': '10px',
             opacity: .7,
-            color: '#fff'
+            color: '#fff',
+            left:'25%',
+            width:'50%'
         }
     });
     let contactInfo = {name:activityOwner.value, phone:activityOwnerPhone.value}
@@ -170,3 +177,29 @@ function submitActivity() {
         }
     });
 }
+
+const activityDeleteBtn = document.querySelector('.activityDelete');
+activityDeleteBtn.addEventListener('click', deleteActivity);
+
+function deleteActivity() {
+    let deleteConfirm = confirm("確認刪除該活動嗎？");
+    if (deleteConfirm === true) {
+        console.log('刪除成功');
+        //delete activityfunction
+    } else {
+        console.log('取消刪除')
+    }
+};
+
+const activityModifyBtn = document.querySelector('.activityModify');
+activityModifyBtn.addEventListener('click', modifyActivity);
+
+function modifyActivity () {
+    let modifyConfirm = confirm("確認修改活動資訊嗎？");
+    if (modifyConfirm === true) {
+        console.log('修改成功');
+        //modify activity function 
+    } else {
+        console.log('取消修改');
+    }
+};

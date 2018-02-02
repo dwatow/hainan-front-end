@@ -77,7 +77,7 @@ function clearFeedbackBeachOption() {
     while (feedbackBeachFilter.childNodes[0]) {
         feedbackBeachFilter.removeChild(feedbackBeachFilter.childNodes[0]);
     }
-    feedbackBeachFilter.innerHTML = `<option selected disabled hidden>選擇海灘分段</option>`;
+    feedbackBeachFilter.innerHTML = `<option selected disabled hidden>選擇海灘名稱</option>`;
 }
 
 function addLocationOption(event) {
