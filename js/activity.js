@@ -89,8 +89,12 @@ function selectActivityPosition(event) {
 
 const activitySubmitBotton = document.querySelector('.activitySubmit');
 activitySubmitBotton.addEventListener('click', checkActivity);
+const activityDeleteButton = document.querySelector('.activityDelete');
+activityDeleteButton.addEventListener('click', checkActivity);
+const activityModifyButton = document.querySelector('.activityModify');
+activityModifyButton.addEventListener('click', checkActivity);
 
-
+const activeId = document.querySelector('.editActive').dataset.id;
 const activityName = document.querySelector('#activeName');
 const activityDescription = document.querySelector('#activeDescription');
 const activityOwner = document.querySelector('#activeOwner');
@@ -99,40 +103,30 @@ const assembleDate = document.querySelector('#assembleDateTime');
 const assembleLocation = document.querySelector('#assembleLocation');
 const assembleURL = document.querySelector('#assembleURL');
 
-function checkActivity() {
+function confirmActivity () {
     if (activityName.value === "") {
         window.alert('請輸入活動名稱！');
-
     } else if (activityLocationFilter.value === "選擇海灘分段") {
         window.alert('請選擇淨灘海岸！');
-
     } else if (activityDescription.value === "") {
         window.alert('請輸入淨灘活動相關敘述！');
-
     } else if (activityOwner.value === "") {
         window.alert('請輸入淨灘活動聯絡人！');
-
     } else if (activityOwnerPhone.value === "") {
         window.alert('請輸入淨灘活動聯絡人電話！');
-
     } else if (assembleDate.value === "") {
         window.alert('請輸入淨灘活動日期！');
-
     } else if (assembleLocation.value === "") {
         window.alert('請輸入淨灘集合地點！');
-
     } else {
-        let addActivityConfirm = confirm("確認發起新活動？");
-        if (addActivityConfirm === true) {
-            submitActivity();
-        } else {
-            window.alert('請再次確認活動資訊後送出！')
-        }
+        // all right
+        return true;
     }
+    //something false
+    return false;
 }
 
-function submitActivity() {
-
+function loading () {
     $.blockUI({
         message: '<h5>資料上傳中...</h5>',
         css: {
@@ -147,6 +141,39 @@ function submitActivity() {
             width:'50%'
         }
     });
+}
+
+function createActivity() {
+    if (confirmActivity() && confirm("確認發起新活動？")) {
+        loading();
+        sendCreateActivity();
+    }
+    else {
+        window.alert('請再次確認活動資訊後送出！')
+    }
+}
+
+function modifyActivity() {
+    if (confirmActivity() && confirm("確認修改已發起的活動？")) {
+        loading();
+        sendModifyActivity();
+    }
+    else {
+        window.alert('請再次確認活動資訊後送出！')
+    }
+}
+
+function deleteActivity() {
+    if (confirm("確認修改已發起的活動？")) {
+        loading();
+        sendDeleteActivity();
+    }
+    else {
+        window.alert('請再次確認活動資訊後送出！')
+    }
+}
+
+function sendCreateActivity() {
     let contactInfo = {name:activityOwner.value, phone:activityOwnerPhone.value}
 
     let activityReport = {
@@ -159,18 +186,75 @@ function submitActivity() {
         "refURL": assembleURL.value
     }
 
-
     $.ajax({
         //settings
         url: 'https://hainan-api.oss.tw/api/beach/activity',
         type: 'POST',
         data: activityReport,
         dataType:'json',
-        //handles response
+        headers: {
+            'x-access-token': getSid()
+        },
         success(response) {
             console.log(response.result);
             $.unblockUI();
             window.alert('上傳成功！')
+            window.location.assign("https://hainan.oss.tw/#!index");
+        },
+        error(jqXHR, status, errorThrown) {
+            console.log(jqXHR);
+        }
+    });
+}
+
+function sendModifyActivity() {
+    let contactInfo = {name:activityOwner.value, phone:activityOwnerPhone.value}
+
+    let activityReport = {
+        "targetID": activityData.id,
+        "title": activityName.value,
+        "description": activityDescription.value,
+        "contact": JSON.stringify(contactInfo),
+        "dateTime": assembleDate.value,
+        "place": assembleLocation.value,
+        "refURL": assembleURL.value
+    }
+
+    $.ajax({
+        //settings
+        url: `https://hainan-api.oss.tw/api/beach/activity/?id=${activeId}`,
+        type: 'PUT',
+        data: activityReport,
+        dataType:'json',
+        headers: {
+            'x-access-token': getSid()
+        },
+        success(response) {
+            console.log(response.result);
+            $.unblockUI();
+            window.alert('上傳成功！')
+            window.location.assign("https://hainan.oss.tw/#!index");
+        },
+        error(jqXHR, status, errorThrown) {
+            console.log(jqXHR);
+        }
+    });
+}
+
+function sendModifyActivity() {
+    $.ajax({
+        //settings
+        url: 'https://hainan-api.oss.tw/api/beach/activity/?id=${activeId}',
+        type: 'DELETE',
+        // data: activityReport,
+        // dataType:'json',
+        headers: {
+            'x-access-token': getSid()
+        },
+        success(response) {
+            console.log(response.result);
+            $.unblockUI();
+            window.alert('刪除成功！')
             window.location.assign("https://hainan.oss.tw/#!index");
         },
         error(jqXHR, status, errorThrown) {

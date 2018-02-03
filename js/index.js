@@ -7,7 +7,7 @@ router.add('feedback', () => checkoutLogin(gotoFeedback, changeArticleForLogin))
 router.add('logout', () => logout());
 
 function checkoutLogin(success, error) {
-    const id = localStorage.getItem('id');
+    const id = getSid();
     typeof success !== "function" || success();
     if(id === null) {
         typeof error !== "function" || error();
@@ -53,7 +53,7 @@ function gotoFeedback() {
 
 function logout() {
     //send logout api
-    localStorage.clear(); //clear id
+    document.cookie = "";  //clear id
 }
 
 function gotoLoginUrl() {
