@@ -161,10 +161,10 @@ function dropReportMarker() {
         let lineColor = true;
 
         if (beach.beachClean === true) {
-            var markerIcon = `./css/GoogleMarkers/red_Marker${markerLetter}.png`;
+            var markerIcon = `./css/GoogleMarkers/blue_Marker${markerLetter}.png`;
             lineColor = true;
         } else {
-            var markerIcon = `./css/GoogleMarkers/blue_Marker${markerLetter}.png`;
+            var markerIcon = `./css/GoogleMarkers/red_Marker${markerLetter}.png`;
             lineColor = false;
         }
 
@@ -201,7 +201,7 @@ function dropReportMarker() {
         map.data.setStyle(function(dataFeature) {
             var color;
             if(lineColor) {
-              color = 'red';
+              color = '#e4a13d';
               console.log(color);
             //   colorSwitch = false;
             } else {

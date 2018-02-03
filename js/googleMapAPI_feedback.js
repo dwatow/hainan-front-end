@@ -94,6 +94,15 @@ function addBeachOption(event) {
     console.clear();
     clearFeedbackBeachOption();
     clearFeedbackLocationOption();
+    clearLocationMarkers();
+    removeReportSealine();
+
+    if (feedbackInfoWindow !== undefined) {
+        feedbackInfoWindow.close();
+    }
+    if (selectMarker !== undefined){
+        selectMarker.setMap(null);
+    }
     let currentCity = this.value;
     // console.log(currentCity)
 
@@ -292,7 +301,7 @@ function addLocationOption(event, beachName) {
 
 function showLocationWindow() {
     var reportMarker = this;
-    // map.setZoom(12);
+    reportMap.setZoom(13);
     reportMap.setCenter(reportMarker.getPosition());
     if (feedbackInfoWindow !== undefined) {
         feedbackInfoWindow.close();
