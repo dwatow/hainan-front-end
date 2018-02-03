@@ -7,18 +7,11 @@ router.add('feedback', () => checkoutLogin(gotoFeedback, changeArticleForLogin))
 router.add('logout', () => logout());
 
 function checkoutLogin(success, error) {
-    console.log('checkoutLogin');
     const id = localStorage.getItem('id');
     typeof success !== "function" || success();
-    if (id !== null) {
-        // check login ok then add
-        console.log('login success');
-        // $('.login').remove();
-    }
-    else {
+    if (id === null)  {
         typeof error !== "function" || error();
     }
-    // check login ok then remove
 }
 
 
@@ -28,15 +21,27 @@ function gotoIndex() {
 
 function gotoActive (isCreateActive = true) {
 
+    // 換頁
+    active.checked = true;
+
     // 切換 活動 button
     const activeRadio = document.querySelector(`#isCreateButton`);
     if (activeRadio) {
         activeRadio.checked = isCreateActive;
     }
 
-
-    // 換頁
-    active.checked = true;
+    if (isCreateActive) {
+        $('#activeName').val("");
+        $('#activityCity').val("選擇城市");
+        $('#activityBeach').val("選擇海灘名稱");
+        $('#activityLocation').val("選擇海灘分段");
+        $('#activeDescription').val("活動介紹文字");
+        $('#activeOwner').val("");
+        $('#activeOwnerPhone').val("");
+        $('#assembleDateTime').val("");
+        $('#assembleLocation').val("");
+        $('#assembleURL').val("");
+    }
 }
 
 function gotoFeedback() {
@@ -56,9 +61,16 @@ function gotoLoginUrl () {
 }
 
 function changeArticleForLogin () {
+    let htmlText = '';
+    if (router.currHash() === 'active') {
+        htmlText = `<p>成為淨攤活動的一份子</p>`;
+    }
+    else if (router.currHash() === 'feedback') {
+        htmlText = `<p>成為回報海灘環境的一份子</p>`;
+    }
     const htmlLogin = `
     <h1>請先登入</h1>
-    <p>成為共同關心海灘的一份子!!!</p>
+    ${htmlText}
     <button type="button" class="btn btn-primary login">登入</button>
     `;
     if (router.currHash() !== 'index') {
@@ -96,8 +108,7 @@ $(document).ready(() => {
     //init activityData
 // })
 
-const listing = document.querySelector('#listing');
-listing.addEventListener('click', () => {
+const activeList = document.querySelector('#listing');
+activeList.addEventListener('click', () => {
     mapsList.checked = false;
-
 })
