@@ -1,10 +1,32 @@
-
 let reportMarker;
 let reportMap;
 let feedbackInfoWindow;
+let beachList;
+let peopleInfoWindow;
 
-let currentFeedbackPosition;
 let feedbackData;
+
+let taiwanCityData = [
+    { cityName:"新北市" , position:{lat:24.91571 , lng:121.6739}},
+    { cityName:"基隆市" , position:{lat:25.10898 , lng:121.7081}},
+    { cityName:"桃園市" , position:{lat:24.93759 , lng:121.2168}},
+    { cityName:"新竹縣" , position:{lat:24.70328 , lng:121.1252}},
+    { cityName:"新竹市" , position:{lat:24.80395 , lng:120.9647}},
+    { cityName:"苗栗縣" , position:{lat:24.48927 , lng:120.9417}},
+    { cityName:"臺中市" , position:{lat:24.23321 , lng:120.9417}},
+    { cityName:"彰化縣" , position:{lat:23.99297 , lng:120.4818}},
+    { cityName:"雲林縣" , position:{lat:23.7558 , lng:120.3897}},
+    { cityName:"嘉義縣" , position:{lat:23.45889 , lng:120.574}},
+    { cityName:"臺南市" , position:{lat:23.1417 , lng:120.2513}},
+    { cityName:"高雄市" , position:{lat:23.01087 , lng:120.666}},
+    { cityName:"屏東縣" , position:{lat:22.54951 , lng:120.62}},
+    { cityName:"宜蘭縣" , position:{lat:24.69295 , lng:121.7195}},
+    { cityName:"花蓮縣" , position:{lat:23.7569 , lng:121.3542}},
+    { cityName:"臺東縣" , position:{lat:22.98461 , lng:120.9876}},
+    { cityName:"澎湖縣" , position:{lat:23.56548 , lng:119.6151}},
+    { cityName:"金門縣" , position:{lat:24.43679 , lng:118.3186}},
+    { cityName:"連江縣" , position:{lat:26.19737 , lng:119.5397}},
+]
 
 const feedbackPage = document.querySelector('.feedbackPage');
 feedbackPage.addEventListener('click', loadFeedbackMap);
@@ -13,9 +35,10 @@ function loadFeedbackMap() {
 }
 
 // window.addEventListener('hashchange', initReportMap);
+let currentFeedbackPosition;
 
 function initReportMap() {
-    // console.log(currentPosition);
+    console.log(currentFeedbackPosition);
     if (currentFeedbackPosition === undefined) {
         reportMap = new google.maps.Map(document.getElementById('reportMap'), {
             center: { lat: 24.3, lng: 120.51 },
@@ -27,7 +50,28 @@ function initReportMap() {
     } else {
         reportMap.setCenter(currentFeedbackPosition);
         reportMap.setZoom(16) 
+    };
+
+    if (navigator.geolocation) {
+        peopleInfoWindow = new google.maps.InfoWindow({ map: reportMap });
+        navigator.geolocation.getCurrentPosition(function (position) {
+            var pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+
+            peopleInfoWindow.setPosition(pos);
+            peopleInfoWindow.setContent('你在這裡');
+            reportMap.setCenter(pos);
+            reportMap.setZoom(12);
+        }, function () {
+            handleLocationError(true, infoWindow, map.getCenter());
+        });
+    } else {
+        // Browser doesn't support Geolocation
+        handleLocationError(false, infoWindow, map.getCenter());
     }
+
 }
 
 function showFeedbackWindow() {
@@ -42,13 +86,57 @@ function showFeedbackWindow() {
 const feedbackCityFilter = document.querySelector('#feedbackCity');
 feedbackCityFilter.addEventListener('change', addBeachOption);
 
+let cityBeachMarkers = [];
+
 function addBeachOption(event) {
+    clearCityBeachMarkers()
     console.clear();
     clearFeedbackBeachOption();
     clearFeedbackLocationOption();
     let currentCity = this.value;
-    let beachList = allBeachData.filter(function (beach) {
+    // console.log(currentCity)
+
+    let cityData = taiwanCityData.filter(function(city){
+        return city.cityName.includes(currentCity)
+    })
+
+
+
+    let cityCoord = cityData[0].position;
+    // reportMap.setCenter(cityCoord);
+    // reportMap.setZoom(8);
+
+    beachList = allBeachData.filter(function (beach) {
         return beach.city.includes(currentCity);
+    })
+
+    let allcityBeach = {};
+    let allcityBeachArray = [];
+    beachList.forEach(function(cityBeach){
+        let beachName = cityBeach.beachName;
+        // console.log(allcityBeach[`${beachName}`])
+        if (allcityBeach[`${beachName}`] === undefined) {
+            allcityBeach[`${beachName}`] = cityBeach.geojson;
+            allcityBeachArray.push({
+                name:beachName, 
+                coord:cityBeach.geojson
+            })
+        }
+        
+    });
+
+    console.log(allcityBeachArray)
+
+
+    // console.log(maxLat(allcityBeachArray))
+    allcityBeachArray.forEach(function(cityBeach, index){
+        let tempCoord = cityBeach.coord[0];
+        console.log(tempCoord)
+        cityBeachMarkers[index] = new google.maps.Marker({
+            position: {lat: tempCoord[1], lng:tempCoord[0]},
+            name:cityBeach.name,
+        })
+        cityBeachMarkers[index].setMap(reportMap);
     })
 
     let beachNamesArray = [];
@@ -58,7 +146,19 @@ function addBeachOption(event) {
             createBeachFilterOption(beach.beachName);
         }
     })
+    
 };
+
+function clearCityBeachMarkers() {
+    for (var i = 0; i < cityBeachMarkers.length; i++) {
+        if (cityBeachMarkers[i]) {
+            cityBeachMarkers[i].setMap(null);
+        }
+    }
+    cityBeachMarkers = [];
+}
+
+
 
 const feedbackBeachFilter = document.querySelector('#feedbackBeach');
 feedbackBeachFilter.addEventListener('change', addLocationOption)
@@ -81,9 +181,10 @@ function clearFeedbackBeachOption() {
 }
 
 function addLocationOption(event) {
+    clearCityBeachMarkers();
     clearFeedbackLocationOption();
     let currentBeach = this.value;
-    let locationList = allBeachData.filter(function (beach) {
+    let locationList = beachList.filter(function (beach) {
         return beach.beachName.includes(currentBeach);
     })
     // console.table(locationList);
@@ -118,7 +219,7 @@ function selectFeedbackLocation(event) {
     console.clear();
     
     let currentLocation = this.value;
-    let currentLocationData = allBeachData.filter(function (position) {
+    let currentLocationData = beachList.filter(function (position) {
         return position.title.includes(currentLocation);
     })
     // console.log(currentLocationData);

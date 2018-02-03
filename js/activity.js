@@ -1,5 +1,5 @@
 let activitykData;
-
+let activityCityBeachList;
 
 const activityCityFilter = document.querySelector('#activityCity');
 activityCityFilter.addEventListener('change', addActivityBeachOption);
@@ -9,13 +9,13 @@ function addActivityBeachOption(event) {
     clearActivityBeachOption();
     clearActivityLocationOption();
     let activityCity = this.value;
-    let activityBeach = allBeachData.filter(function (beach) {
+    activityCityBeachList = allBeachData.filter(function (beach) {
         return beach.city.includes(activityCity);
     })
     // console.table(activityBeach)
 
     let activityBeachArray = [];
-    activityBeach.forEach(function (beach) {
+    activityCityBeachList.forEach(function (beach) {
         if (activityBeachArray.includes(beach.beachName) === false) {
             activityBeachArray.push(beach.beachName);
             createActivityBeachOption(beach.beachName);
@@ -46,7 +46,7 @@ const activityLocationFilter = document.querySelector('#activityLocation');
 function addActivityLocationOption(event) {
     clearActivityLocationOption()
     let currentActivityBeach = this.value;
-    let activityLocationList = allBeachData.filter(function (beach) {
+    let activityLocationList = activityCityBeachList.filter(function (beach) {
         return beach.beachName.includes(currentActivityBeach);
     })
     console.table(activityLocationList)

@@ -9,7 +9,7 @@ $.ajax({
     dataType: 'json',
     success: function (response) {
         activityData = response.result;
-        // console.log(activityData)
+        console.log(activityData)
         initIndexMap();
     },
     error: function (jqXHR, status, errorThrown) {
@@ -99,7 +99,7 @@ function dropActivityMarker() {
         if (a.dateTime > b.dateTime) {
             return 1;
         }
-    })
+    }).slice(0, 50);
     // console.table(organizedactivityData)
     
     organizedActivityData.forEach(function(beach, index){
@@ -123,6 +123,8 @@ function dropActivityMarker() {
             contact:beach.contact,
         });
 
+        console.log(beach.contact)
+
         let googleArray = [];
         beach.geojson.forEach(function (coord) {
             let coordObj = { lat: coord[1], lng: coord[0] };
@@ -137,7 +139,7 @@ function dropActivityMarker() {
         });
 
         google.maps.event.addListener(markers[index], 'click', showActivityWindow);
-        setTimeout(dropMarker(index), index * 50);
+        setTimeout(dropMarker(index), index * 5);
         addResult(beach, index, markerIcon);
     });
 };
@@ -151,7 +153,7 @@ function dropReportMarker() {
         if (a.updateDate > b.updateDate) {
             return 1;
         }
-    })
+    }).slice(0, 50);
     
     organizedReportData.forEach(function(beach, index){
         let markerLetter = String.fromCharCode('A'.charCodeAt(0) + (index % 26));
@@ -212,7 +214,7 @@ function dropReportMarker() {
         });
 
         google.maps.event.addListener(markers[index], 'click', showReportWindow);
-        setTimeout(dropMarker(index), index * 50);
+        setTimeout(dropMarker(index), index * 5);
         addResult(beach, index, markerIcon);
     })
 };
@@ -319,7 +321,7 @@ function showReportWindow(event) {
     
     reportImage.style.backgroundImage = `url(${marker.url})`;
     showActive({
-        beach: "某個海灘",
+        beach: "marker.sealinename",
         city: "城市",
         date: "活動日期",
         location: "集合地點",
