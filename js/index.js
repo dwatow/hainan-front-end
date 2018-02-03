@@ -11,8 +11,14 @@ function gotoIndex() {
 }
 
 
-function gotoActive () {
-    active.checked = true
+function gotoActive (activeEvent = 'activitySubmitButton') {
+
+    // 切換 活動 button
+    const activeRadio = document.querySelector(`#${activeEvent}`);
+    activeRadio.checked = true;
+
+    // 換頁
+    active.checked = true;
 }
 
 function gotoFeedback() {
@@ -60,7 +66,9 @@ function checkoutLogin(success, error) {
 
 $(document).ready(() => {
     router.start();
-    router.go('index');
+    if (router.currHash() === "") {
+        router.go('index');
+    }
 
     //if login in
     // 也許會改成用 cookie

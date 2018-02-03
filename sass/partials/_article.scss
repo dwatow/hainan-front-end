@@ -10,3 +10,27 @@ article {
         display: block;
     }
 }
+
+#activitySubmitButton ~ .activityBtns > .activitySubmit {
+    display: none;
+}
+
+#activityModifyButton ~ .activityBtns > .activityModify {
+    display: none;
+}
+
+#activityDeleteButton ~ .activityBtns > .activityDelete {
+    display: none;
+}
+
+#activitySubmitButton:checked ~ .activityBtns > .activitySubmit {
+    display: block;
+}
+
+#activityModifyButton:checked ~ .activityBtns > .activityModify {
+    display: block;
+}
+
+#activityDeleteButton:checked ~ .activityBtns > .activityDelete {
+    display: block;
+}

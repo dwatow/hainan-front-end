@@ -56,6 +56,36 @@ article {
   display: block;
 }
 
+/* line 14, ../sass/partials/_article.scss */
+#activitySubmitButton ~ .activityBtns > .activitySubmit {
+  display: none;
+}
+
+/* line 18, ../sass/partials/_article.scss */
+#activityModifyButton ~ .activityBtns > .activityModify {
+  display: none;
+}
+
+/* line 22, ../sass/partials/_article.scss */
+#activityDeleteButton ~ .activityBtns > .activityDelete {
+  display: none;
+}
+
+/* line 26, ../sass/partials/_article.scss */
+#activitySubmitButton:checked ~ .activityBtns > .activitySubmit {
+  display: block;
+}
+
+/* line 30, ../sass/partials/_article.scss */
+#activityModifyButton:checked ~ .activityBtns > .activityModify {
+  display: block;
+}
+
+/* line 34, ../sass/partials/_article.scss */
+#activityDeleteButton:checked ~ .activityBtns > .activityDelete {
+  display: block;
+}
+
 /* line 1, ../sass/partials/_footer.scss */
 footer {
   background-color: #ccc;
