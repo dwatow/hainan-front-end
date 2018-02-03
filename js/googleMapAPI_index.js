@@ -113,6 +113,7 @@ function dropActivityMarker() {
         let cleanDateArray = beach.dateTime.split('T');
 
         markers[index] = new google.maps.Marker({
+            activeId: beach.id,
             position: { lat: coord[1], lng: coord[0] },
             animation: google.maps.Animation.DROP,
             icon: markerIcon,
@@ -175,6 +176,7 @@ function dropReportMarker() {
         let feedbackDateArray = beach.updateDate.split('T');
 
         markers[index] = new google.maps.Marker({
+            activeId: beach.id,
             position: { lat: coord[1], lng: coord[0] },
             animation: google.maps.Animation.DROP,
             icon: markerIcon,
@@ -294,14 +296,15 @@ function showActivityWindow(event) {
     // document.getElementById('iw-location').textContent = 'location';
     document.getElementById('iw-host').textContent = contactWindow.name;
     document.getElementById('iw-phone').textContent = contactWindow.phone;
-    console.log(marker);
+    // console.log(marker);
     showActive ({
         "活動名稱": marker.activity,
         "城市": marker.city,
         "活動日期": marker.date,
         "集合地點": marker.sealinename,
         "聯絡人": marker.contact.name,
-        "聯絡電話": marker.contact.phone
+        "聯絡電話": marker.contact.phone,
+        button: marker.activeId
     });
 };
 
@@ -320,13 +323,14 @@ function showReportWindow(event) {
     }
 
     reportImage.style.backgroundImage = `url(${marker.url})`;
-    console.log(marker);
+    // console.log(marker);
     showActive ({
         "海攤": marker.sealinename,
         "城市": marker.cityname,
         "回報日期": marker.date,
         "是否需要淨攤": marker.clean? "需要" : "不需要",
-        img: `<img src="${marker.url}" />`
+        img: `<img src="${marker.url}" />`,
+        button: marker.activeId
     });
 };
 
@@ -353,11 +357,58 @@ function showActive(data) {
             keyCell.setAttribute('colspan', '2')
             tr.appendChild(keyCell);
         }
+        else if (key === "button") {
+            const alink = document.createElement('a');
+            alink.href = "#active";
+            const button = document.createElement('button');
+            button.classList.add('btn');
+            button.classList.add('btn-warning');
+            button.classList.add('editActive');
+            button.dataset.id = data[key];
+            button.setAttribute('type', 'button');
+            button.textContent = "變更活動 >>";
+            alink.appendChild(button);
+            keyCell.innerHTML = alink.outerHTML;
+            keyCell.setAttribute('colspan', '2')
+            keyCell.classList.add('text-right');
+            tr.appendChild(keyCell);
+        }
         else {
             tr.appendChild(keyCell);
             tr.appendChild(valueCell);
         }
         table.appendChild(tr);
     }
+
     activeDetail.innerHTML = table.outerHTML;
+
+    $('.editActive').on('click', (e) => {
+        router.go('active');
+        const id = $(e.currentTarget).data('id');
+        gotoActive(false);
+
+        const active = activityData.filter((item) => item.id === id).shift();
+        console.log(active);
+        const contact = JSON.parse(active.contact)
+        $('#activeName').val(active.title);
+        $('#activityCity').val(active.city);
+        // console.log(active.city);
+        addActivityBeachOption(e, active.city);
+
+        $('#activityBeach').val(active.beachName);
+        addActivityLocationOption(e, active.beachName);
+        // console.log(active.beachName);
+
+        $('#activityLocation').val(active.beachTitle);
+        $('#activeDescription').val(active.description);
+        $('#activeOwner').val(contact.name);
+        $('#activeOwnerPhone').val(contact.phone);
+        $('#assembleDateTime').val(active.dateTime.slice(0, 10));
+
+        $('#assembleLocation').val(active.place);
+        $('#assembleURL').val(active.refURL);
+    });
 }
+
+
+var debug;

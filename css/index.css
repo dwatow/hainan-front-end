@@ -163,3 +163,13 @@ footer {
   margin-left: auto;
   margin-right: 10px;
 }
+
+/* line 55, ../sass/index.scss */
+.editActive {
+  display: none;
+}
+
+/* line 59, ../sass/index.scss */
+#isEditActive ~ #activeDetail .editActive {
+  display: inline-block;
+}

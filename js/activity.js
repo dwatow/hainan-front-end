@@ -4,11 +4,12 @@ let activitykData;
 const activityCityFilter = document.querySelector('#activityCity');
 activityCityFilter.addEventListener('change', addActivityBeachOption);
 
-function addActivityBeachOption(event) {
+function addActivityBeachOption(event, currCityName) {
     console.clear();
     clearActivityBeachOption();
     clearActivityLocationOption();
-    let activityCity = this.value;
+    let activityCity = this.value || currCityName;
+    console.log(activityCity);
     let activityBeach = allBeachData.filter(function (beach) {
         return beach.city.includes(activityCity);
     })
@@ -43,9 +44,9 @@ function clearActivityBeachOption() {
 activityBeachFilter.addEventListener('change', addActivityLocationOption);
 const activityLocationFilter = document.querySelector('#activityLocation');
 
-function addActivityLocationOption(event) {
+function addActivityLocationOption(event, currBeachName) {
     clearActivityLocationOption()
-    let currentActivityBeach = this.value;
+    let currentActivityBeach = this.value || currBeachName;
     let activityLocationList = allBeachData.filter(function (beach) {
         return beach.beachName.includes(currentActivityBeach);
     })
@@ -198,7 +199,7 @@ function modifyActivity () {
     let modifyConfirm = confirm("確認修改活動資訊嗎？");
     if (modifyConfirm === true) {
         console.log('修改成功');
-        //modify activity function 
+        //modify activity function
     } else {
         console.log('取消修改');
     }
