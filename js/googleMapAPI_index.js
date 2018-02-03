@@ -120,7 +120,7 @@ function dropActivityMarker() {
             city: beach.city,
             sealinename: beach.beachTitle,
             date: cleanDateArray[0],
-            contact:beach.contact,
+            contact:JSON.parse(beach.contact),
         });
 
         let googleArray = [];
@@ -283,7 +283,8 @@ function showActivityWindow(event) {
     map.setZoom(12);
     map.setCenter(marker.getPosition());
     //開啟infoWindow
-    let contactWindow = JSON.parse(marker.contact);
+    let contactWindow = marker.contact;
+    // let contactWindow = JSON.parse(marker.contact);
     console.log(contactWindow)
     activityInfoWindow.open(map, marker);
     document.getElementById('activity').innerHTML = `${marker.activity}`;
@@ -295,12 +296,12 @@ function showActivityWindow(event) {
     document.getElementById('iw-phone').textContent = contactWindow.phone;
     console.log(marker);
     showActive({
-        beach: "某個海灘",
-        city: "城市",
-        date: "活動日期",
-        location: "集合地點",
-        host: "聯絡人",
-        phone: "聯絡電話"
+        "活動名稱": marker.activity,
+        "城市": marker.city,
+        "活動日期": marker.date,
+        "集合地點": marker.sealinename,
+        "聯絡人": marker.contact.name,
+        "聯絡電話": marker.contact.phone
     });
 };
 
