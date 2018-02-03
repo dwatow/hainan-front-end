@@ -9,7 +9,7 @@ router.add('logout', () => logout());
 function checkoutLogin(success, error) {
     const id = localStorage.getItem('id');
     typeof success !== "function" || success();
-    if (id === null)  {
+    if(id === null) {
         typeof error !== "function" || error();
     }
 }
@@ -19,18 +19,18 @@ function gotoIndex() {
     index.checked = true;
 }
 
-function gotoActive (isCreateActive = true) {
+function gotoActive(isCreateActive = true) {
 
     // 換頁
     active.checked = true;
 
     // 切換 活動 button
     const activeRadio = document.querySelector(`#isCreateButton`);
-    if (activeRadio) {
+    if(activeRadio) {
         activeRadio.checked = isCreateActive;
     }
 
-    if (isCreateActive) {
+    if(isCreateActive) {
         $('#activeName').val("");
         $('#activityCity').val("選擇城市");
         $('#activityBeach').val("選擇海灘名稱");
@@ -56,16 +56,16 @@ function logout() {
     localStorage.clear(); //clear id
 }
 
-function gotoLoginUrl () {
+function gotoLoginUrl() {
     window.location.assign("https://hainan-api.oss.tw/api/beach/login/facebook");
 }
 
-function changeArticleForLogin () {
+function changeArticleForLogin() {
     let htmlText = '';
-    if (router.currHash() === 'active') {
+    if(router.currHash() === 'active') {
         htmlText = `<p>成為淨攤活動的一份子</p>`;
     }
-    else if (router.currHash() === 'feedback') {
+    else if(router.currHash() === 'feedback') {
         htmlText = `<p>成為回報海灘環境的一份子</p>`;
     }
     const htmlLogin = `
@@ -73,15 +73,15 @@ function changeArticleForLogin () {
     ${htmlText}
     <button type="button" class="btn btn-primary login">登入</button>
     `;
-    if (router.currHash() !== 'index') {
+    if(router.currHash() !== 'index') {
         $(`[data-section="${router.currHash()}"]`).html(htmlLogin);
-        $('.login').on( 'click',gotoLoginUrl);
+        $('.login').on('click', gotoLoginUrl);
     }
 }
 
 $(document).ready(() => {
     router.start();
-    if (router.currHash() === "") {
+    if(router.currHash() === "") {
         router.go('index');
     }
 
@@ -90,16 +90,36 @@ $(document).ready(() => {
     });
 })
 
+function getSid() {
+    return document.cookie.split("=");
+}
+
+function demo() {
+    $.ajax({
+        url: 'https://hainan-api.oss.tw/api/beach/testLogin',
+        method: 'POST',
+        dataType: 'json',
+        headers: {
+            'x-access-token': getSid()
+        },
+        data: {
+            "id": "a23456432"
+        }
+    }).done(function (data) {
+        console.log(data);
+    });
+}
+
 // $(window).on('load', () => {
 
-    // initIndexMap();
-    // initReportMap();
-    // router.reload();
+// initIndexMap();
+// initReportMap();
+// router.reload();
 
-    //send api for data
+//send api for data
 
-    //if success
-    //init activityData
+//if success
+//init activityData
 // })
 
 const activeList = document.querySelector('#listing');
