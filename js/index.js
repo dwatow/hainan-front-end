@@ -91,7 +91,7 @@ $(document).ready(() => {
 })
 
 function getSid() {
-    return document.cookie.split("=");
+    return document.cookie.split("=").pop();
 }
 
 function demo() {
