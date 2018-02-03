@@ -1,5 +1,5 @@
 let activitykData;
-
+let activityCityBeachList;
 
 const activityCityFilter = document.querySelector('#activityCity');
 activityCityFilter.addEventListener('change', addActivityBeachOption);
@@ -9,14 +9,14 @@ function addActivityBeachOption(event, currCityName) {
     clearActivityBeachOption();
     clearActivityLocationOption();
     let activityCity = this.value || currCityName;
-    console.log(activityCity);
+    // console.log(activityCity);
     let activityBeach = allBeachData.filter(function (beach) {
         return beach.city.includes(activityCity);
     })
     // console.table(activityBeach)
 
     let activityBeachArray = [];
-    activityBeach.forEach(function (beach) {
+    activityCityBeachList.forEach(function (beach) {
         if (activityBeachArray.includes(beach.beachName) === false) {
             activityBeachArray.push(beach.beachName);
             createActivityBeachOption(beach.beachName);
