@@ -76,7 +76,7 @@
 		self.reload();
 	}
 
-    Router.prototype.currHasn = function () {
+    Router.prototype.currHash = function () {
         if (window.location.hash.split('#!').join("")) {
             return window.location.hash.split('#!')[1];
         }
