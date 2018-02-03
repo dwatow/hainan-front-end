@@ -1,10 +1,11 @@
 var router = new Router();
-router.add('index', () => checkoutLogin(gotoIndex))
-router.add('active', () => checkoutLogin(gotoActive, gotoLoginUrl))
-router.add('feedback', () => checkoutLogin(gotoFeedback, gotoLoginUrl))
-router.add('logout', () => logout())
+router.setIndex = 'index';
 
-;
+router.add('index', () => checkoutLogin(gotoIndex));
+router.add('active', () => checkoutLogin(gotoActive, changeArticleForLogin));
+router.add('feedback', () => checkoutLogin(gotoFeedback, changeArticleForLogin));
+router.add('logout', () => logout());
+
 function gotoIndex() {
     index.checked = true;
 }
@@ -30,21 +31,36 @@ function gotoLoginUrl () {
     window.location.assign("https://hainan-api.oss.tw/api/beach/login/facebook");
 }
 
+function changeArticleForLogin () {
+    const htmlLogin = `
+    <h1>請先登入</h1>
+    <p>成為共同關心海灘的一份子!!!</p>
+    <button type="button" class="btn btn-primary login">登入</button>
+    `;
+    if (router.currHash() !== 'index') {
+        $(`[data-section="${router.currHash()}"]`).html(htmlLogin);
+        $('.login').on(gotoLoginUrl);
+    }
+}
+
 function checkoutLogin(success, error) {
     const id = localStorage.getItem('id');
+    typeof success !== "function" || success();
     if (id !== null) {
         // check login ok then add
         console.log('login success');
-        $('.login').remove();
-        success || success();
+        // $('.login').remove();
     }
     else {
-        error || error();
+
+        typeof error !== "function" || error();
     }
     // check login ok then remove
 }
 
 $(document).ready(() => {
+    router.start();
+    router.go('index');
 
     //if login in
     // 也許會改成用 cookie
@@ -55,8 +71,6 @@ $(document).ready(() => {
 
         //取 token
     }
-    router.start();
-    router.go('index')
 })
 
 // $(window).on('load', () => {
