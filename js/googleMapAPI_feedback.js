@@ -4,6 +4,7 @@ let feedbackInfoWindow;
 let beachList;
 let peopleInfoWindow;
 
+let allBeachData;
 let feedbackData;
 
 let taiwanCityData = [
@@ -134,9 +135,10 @@ function addBeachOption(event) {
         console.log(tempCoord)
         cityBeachMarkers[index] = new google.maps.Marker({
             position: {lat: tempCoord[1], lng:tempCoord[0]},
-            name:cityBeach.name,
+            value:cityBeach.name,
         })
         cityBeachMarkers[index].setMap(reportMap);
+        google.maps.event.addListener(cityBeachMarkers[index], 'click', selectMapBeach);
     })
 
     let beachNamesArray = [];
@@ -148,6 +150,23 @@ function addBeachOption(event) {
     })
     
 };
+
+function selectMapBeach (event) {
+    let selectedMapBeachMarker = this;
+    let selectedMapBeachOption = document.querySelector(`option[value = ${this.value}]`);
+    selectedMapBeachOption.selected=true;
+    // document.querySelector('#feedbackBeach').value = this.value;
+    // $("#feedbackBeach").change();
+    // document.querySelector('#feedbackBeach').change();
+    
+    beachList = allBeachData.filter(function (beach) {
+        // console.log(beach)
+        return beach.title.includes(selectedMapBeachMarker.value);
+    })
+    console.log(beachList);
+    addLocationOption(event, selectedMapBeachMarker.value);
+}
+
 
 function clearCityBeachMarkers() {
     for (var i = 0; i < cityBeachMarkers.length; i++) {
@@ -180,14 +199,15 @@ function clearFeedbackBeachOption() {
     feedbackBeachFilter.innerHTML = `<option selected disabled hidden>選擇海灘名稱</option>`;
 }
 
-function addLocationOption(event) {
+function addLocationOption(event, beachName) {
     clearCityBeachMarkers();
     clearFeedbackLocationOption();
-    let currentBeach = this.value;
+    let currentBeach = this.value || beachName;
+    console.log(currentBeach)
     let locationList = beachList.filter(function (beach) {
         return beach.beachName.includes(currentBeach);
     })
-    // console.table(locationList);
+    console.table(locationList);
     let locationNamesArray = [];
     locationList.forEach(function (location) {
         if (locationNamesArray.includes(location.title) === false) {
@@ -301,7 +321,6 @@ function removeReportSealine() {
 
 
 
-let allBeachData;
 
 $.ajax({
     url: 'https://hainan-api.oss.tw/api/beach/',
