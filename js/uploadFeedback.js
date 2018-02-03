@@ -54,6 +54,7 @@ function submitReport(event) {
 
     event.preventDefault();
     let files = imageSelector.files;
+    console.log(feedbackData)
 
     if (feedbackLocationFilter.value === '選擇海灘分段') {
         window.alert('請先選擇回報地點！');
@@ -166,21 +167,71 @@ const feedbackDescription = document.querySelector('#feedbackDescription');
 function uploadToServer(url) {
     let cleanStatus = document.querySelector('input[name="cleanRequire"]:checked').value;
 
-    let feedbackReport = {
-        "targetID": feedbackData.id,
-        "description": feedbackDescription.value,
-        "imageURL": url,
-        "beachClean": cleanStatus,
+
+
+    let checkHistory = reportData.some(function(beach){
+        return beach.id === feedbackData.id
+    })
+
+    if (checkHistory ===true) {
+        let reportHistory = reportData.filter(function(beach){
+            return beachList.id = feedbackData.id;
+        })[0];
+
+        let putReport = {
+            "id": reportHistory.id,
+            "description": feedbackDescription.value,
+            "imageURL": url,
+            "beachClean": cleanStatus,
+        };
+        putToServer(putReport);
+    } else {
+        let postReport = {
+            "targetID": feedbackData.id,
+            "description": feedbackDescription.value,
+            "imageURL": url,
+            "beachClean": cleanStatus,
+        };
+        postToServer(postReport);   
     }
 
-    console.table(feedbackReport)
+    
+   
+}
 
+function postToServer(feedbackReport){
     $.ajax({
         //settings
         url: 'https://hainan-api.oss.tw/api/beach/notification',
         type: 'POST',
         data: feedbackReport,
         dataType: 'json',
+        headers: {
+            'x-access-token': getSid()
+        },
+        //handles response
+        success(response) {
+            console.log(response.result);
+            $.unblockUI();
+            window.alert('上傳成功！')
+            window.location.assign("https://hainan.oss.tw/#!index");
+        },
+        error(jqXHR, status, errorThrown) {
+            console.log(jqXHR);
+        }
+    });
+}
+
+function putToServer(feedbackReport){
+    $.ajax({
+        //settings
+        url: `https://hainan-api.oss.tw/api/beach/notification?id=${feedbackReport.targetID}`,
+        type: 'PUT',
+        data: feedbackReport,
+        dataType: 'json',
+        headers: {
+            'x-access-token': getSid()
+        },
         //handles response
         success(response) {
             console.log(response.result);
