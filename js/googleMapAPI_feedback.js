@@ -64,15 +64,15 @@ function initReportMap() {
             peopleInfoWindow.setContent('你在這裡');
             reportMap.setCenter(pos);
             reportMap.setZoom(12);
-        }, function () {
-            handleLocationError(true, infoWindow, map.getCenter());
-        });
-    } else {
-        // Browser doesn't support Geolocation
-        handleLocationError(false, infoWindow, map.getCenter());
+        })
     }
-
 }
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+    peopleInfoWindow.setPosition(pos);
+    peopleInfoWindow.setContent(browserHasGeolocation ?
+                          'Error: The Geolocation service failed.' :
+                          'Error: Your browser doesn\'t support geolocation.');
+  }
 
 function showFeedbackWindow() {
     let currentMarker = this;
@@ -128,10 +128,18 @@ function addBeachOption(event) {
                 coord:cityBeach.geojson
             })
         }
-        
     });
 
     console.log(allcityBeachArray)
+
+    // for (key in allcityBeach) {
+    //     allcityBeach[key][0];
+    //     cityBeachMarkers[index] = new google.maps.Marker({
+    //         position: {lat: tempCoord[1], lng:tempCoord[0]},
+    //         value:key,
+    //     })
+
+    // }
 
     // console.log(maxLat(allcityBeachArray))
     allcityBeachArray.forEach(function(cityBeach, index){

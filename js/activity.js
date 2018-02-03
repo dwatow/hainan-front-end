@@ -88,11 +88,11 @@ function selectActivityPosition(event) {
 }
 
 const activitySubmitBotton = document.querySelector('.activitySubmit');
-activitySubmitBotton.addEventListener('click', checkActivity);
+activitySubmitBotton.addEventListener('click', createActivity);
 const activityDeleteButton = document.querySelector('.activityDelete');
-activityDeleteButton.addEventListener('click', checkActivity);
+activityDeleteButton.addEventListener('click', modifyActivity);
 const activityModifyButton = document.querySelector('.activityModify');
-activityModifyButton.addEventListener('click', checkActivity);
+activityModifyButton.addEventListener('click', deleteActivity);
 
 const activeId = document.querySelector('.editActive').dataset.id;
 const activityName = document.querySelector('#activeName');
