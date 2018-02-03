@@ -11,26 +11,42 @@ article {
     }
 }
 
-#activitySubmitButton ~ .activityBtns > .activitySubmit {
+.activeDetail {
+    td {
+        width: 1px;
+    }
+
+    img {
+        display: block;
+        width: 100%;
+    }
+}
+
+#isCreateButton {
+    opacity: 0;
+    position: absolute;
+}
+
+#isCreateButton ~ .activityBtns > .activitySubmit {
     display: none;
 }
 
-#activityModifyButton ~ .activityBtns > .activityModify {
+#isCreateButton ~ .activityBtns > .activityModify {
+    display: inline-block;
+}
+
+#isCreateButton ~ .activityBtns > .activityDelete {
+    display: inline-block;
+}
+
+#isCreateButton:checked ~ .activityBtns > .activitySubmit {
+    display: inline-block;
+}
+
+#isCreateButton:checked ~ .activityBtns > .activityModify {
     display: none;
 }
 
-#activityDeleteButton ~ .activityBtns > .activityDelete {
+#isCreateButton:checked ~ .activityBtns > .activityDelete {
     display: none;
-}
-
-#activitySubmitButton:checked ~ .activityBtns > .activitySubmit {
-    display: block;
-}
-
-#activityModifyButton:checked ~ .activityBtns > .activityModify {
-    display: block;
-}
-
-#activityDeleteButton:checked ~ .activityBtns > .activityDelete {
-    display: block;
 }

@@ -11,11 +11,11 @@ function gotoIndex() {
 }
 
 
-function gotoActive (activeEvent = 'activitySubmitButton') {
+function gotoActive (isCreateActive = true) {
 
     // 切換 活動 button
-    const activeRadio = document.querySelector(`#${activeEvent}`);
-    activeRadio.checked = true;
+    const activeRadio = document.querySelector(`#isCreateButton`);
+    activeRadio.checked = isCreateActive;
 
     // 換頁
     active.checked = true;
@@ -98,14 +98,14 @@ listing.addEventListener('click', () => {
     mapsList.checked = false;
 
     //之後接到 API 成功時，在非同步時做這件事。現在先假裝有在跑。
-    showActive({
-        beach: "某個海灘",
-        city: "城市",
-        date: "活動日期",
-        location: "集合地點",
-        host: "聯絡人",
-        phone: "聯絡電話"
-    });
+    // showActive({
+    //     beach: "某個海灘",
+    //     city: "城市",
+    //     date: "活動日期",
+    //     location: "集合地點",
+    //     host: "聯絡人",
+    //     phone: "聯絡電話"
+    // });
 })
 
 
@@ -116,15 +116,25 @@ function showActive(data) {
     const table = document.createElement('table');
     table.classList.add('table');
     table.classList.add('table-striped');
+    table.classList.add('activeDetail');
     for (key in data) {
         const keyCell = document.createElement('td');
+        keyCell.setAttribute('scope', 'row');
         const valueCell = document.createElement('td');
-        keyCell.textContent = key;
-        valueCell.textContent = data[key];
+        keyCell.innerHTML = key;
+        valueCell.innerHTML = data[key];
 
         const tr = document.createElement('tr');
-        tr.appendChild(keyCell);
-        tr.appendChild(valueCell);
+
+        if (key === "img") {
+            keyCell.innerHTML = data[key];
+            keyCell.setAttribute('colspan', '2')
+            tr.appendChild(keyCell);
+        }
+        else {
+            tr.appendChild(keyCell);
+            tr.appendChild(valueCell);
+        }
         table.appendChild(tr);
     }
     activeDetail.innerHTML = table.outerHTML;

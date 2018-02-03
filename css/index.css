@@ -56,34 +56,50 @@ article {
   display: block;
 }
 
-/* line 14, ../sass/partials/_article.scss */
-#activitySubmitButton ~ .activityBtns > .activitySubmit {
-  display: none;
+/* line 15, ../sass/partials/_article.scss */
+.activeDetail td {
+  width: 1px;
 }
-
-/* line 18, ../sass/partials/_article.scss */
-#activityModifyButton ~ .activityBtns > .activityModify {
-  display: none;
-}
-
-/* line 22, ../sass/partials/_article.scss */
-#activityDeleteButton ~ .activityBtns > .activityDelete {
-  display: none;
-}
-
-/* line 26, ../sass/partials/_article.scss */
-#activitySubmitButton:checked ~ .activityBtns > .activitySubmit {
+/* line 19, ../sass/partials/_article.scss */
+.activeDetail img {
   display: block;
+  width: 100%;
+}
+
+/* line 25, ../sass/partials/_article.scss */
+#isCreateButton {
+  opacity: 0;
+  position: absolute;
 }
 
 /* line 30, ../sass/partials/_article.scss */
-#activityModifyButton:checked ~ .activityBtns > .activityModify {
-  display: block;
+#isCreateButton ~ .activityBtns > .activitySubmit {
+  display: none;
 }
 
 /* line 34, ../sass/partials/_article.scss */
-#activityDeleteButton:checked ~ .activityBtns > .activityDelete {
-  display: block;
+#isCreateButton ~ .activityBtns > .activityModify {
+  display: inline-block;
+}
+
+/* line 38, ../sass/partials/_article.scss */
+#isCreateButton ~ .activityBtns > .activityDelete {
+  display: inline-block;
+}
+
+/* line 42, ../sass/partials/_article.scss */
+#isCreateButton:checked ~ .activityBtns > .activitySubmit {
+  display: inline-block;
+}
+
+/* line 46, ../sass/partials/_article.scss */
+#isCreateButton:checked ~ .activityBtns > .activityModify {
+  display: none;
+}
+
+/* line 50, ../sass/partials/_article.scss */
+#isCreateButton:checked ~ .activityBtns > .activityDelete {
+  display: none;
 }
 
 /* line 1, ../sass/partials/_footer.scss */
