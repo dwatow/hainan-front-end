@@ -85,15 +85,9 @@ $(document).ready(() => {
         router.go('index');
     }
 
-    //if login in
-    // 也許會改成用 cookie
-    if (window.location.hash.search('id') !== -1) {
-        const id = window.location.hash.split('/')[1].split('?id=')[1];
-        //存 id
-        localStorage.setItem('id', id);
-
-        //取 token
-    }
+    $('.nav-item').on('click', () => {
+        $('.collapse').collapse('hide');
+    });
 })
 
 // $(window).on('load', () => {
