@@ -6,6 +6,7 @@ router.add('logout', () => logout())
 
 function gotoIndex() {
     index.checked = true;
+    checkoutLogin();
     // $(window).one('load', () => {
     //     initIndexMap();
     // })
@@ -34,17 +35,17 @@ function logout() {
 
 function checkoutLogin(success) {
     const id = localStorage.getItem('id');
+    console.log(id);
     if (id === null) {
-        // window.location.assign("https://hainan-api.oss.tw/api/beach/login/facebook");
+        window.location.assign("https://hainan-api.oss.tw/api/beach/login/facebook");
     }
     else {
         // check login ok then add
-        // success();
+        console.log('success');
+        $('.login').remove();
+        success || success();
     }
     // check login ok then remove
-    console.log('success');
-    $('.login').remove();
-    success();
 }
 
 $(document).ready(() => {
@@ -56,6 +57,7 @@ $(document).ready(() => {
         //取 token
     }
     router.start();
+    router.go('index')
 })
 
 // $(window).on('load', () => {
