@@ -76,6 +76,15 @@
 		self.reload();
 	}
 
+    Router.prototype.currHasn = function () {
+        if (window.location.hash.split('#!').join("")) {
+            return window.location.hash.split('#!')[1];
+        }
+        else {
+            return "";
+        }
+    }
+
 	/**
 	 * 获取callback
 	 * @return false or callback
