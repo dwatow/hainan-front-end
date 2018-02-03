@@ -1,30 +1,23 @@
 var router = new Router();
-router.add('index', () => gotoIndex())
-router.add('active', () => gotoActive())
-router.add('feedback', () => gotoFeedback())
+router.add('index', () => checkoutLogin(gotoIndex))
+router.add('active', () => checkoutLogin(gotoActive, gotoLoginUrl))
+router.add('feedback', () => checkoutLogin(gotoFeedback, gotoLoginUrl))
 router.add('logout', () => logout())
 
+;
 function gotoIndex() {
     index.checked = true;
-    checkoutLogin();
-    // $(window).one('load', () => {
-    //     initIndexMap();
-    // })
 }
 
+
 function gotoActive () {
-    checkoutLogin(() => {
-        active.checked = true
-    })
+    active.checked = true
 }
 
 function gotoFeedback() {
-
-    checkoutLogin(() => {
-        feedback.checked = true;
-        $(window).one('load', () => {
-            initReportMap();
-        })
+    feedback.checked = true;
+    $(window).one('load', () => {
+        initReportMap();
     })
 }
 
@@ -33,22 +26,28 @@ function logout() {
     localStorage.clear(); //clear id
 }
 
-function checkoutLogin(success) {
+function gotoLoginUrl () {
+    window.location.assign("https://hainan-api.oss.tw/api/beach/login/facebook");
+}
+
+function checkoutLogin(success, error) {
     const id = localStorage.getItem('id');
-    console.log(id);
-    if (id === null) {
-        window.location.assign("https://hainan-api.oss.tw/api/beach/login/facebook");
-    }
-    else {
+    if (id !== null) {
         // check login ok then add
-        console.log('success');
+        console.log('login success');
         $('.login').remove();
         success || success();
+    }
+    else {
+        error || error();
     }
     // check login ok then remove
 }
 
 $(document).ready(() => {
+
+    //if login in
+    // 也許會改成用 cookie
     if (window.location.hash.search('id') !== -1) {
         const id = window.location.hash.split('/')[1].split('?id=')[1];
         //存 id
