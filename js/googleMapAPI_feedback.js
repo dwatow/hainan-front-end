@@ -154,16 +154,17 @@ function addBeachOption(event) {
 function selectMapBeach (event) {
     let selectedMapBeachMarker = this;
     let selectedMapBeachOption = document.querySelector(`option[value = ${this.value}]`);
-    selectedMapBeachOption.selected=true;
-    // document.querySelector('#feedbackBeach').value = this.value;
+    // selectedMapBeachOption.selected=true;
+    document.querySelector('#feedbackBeach').value = this.value;
     // $("#feedbackBeach").change();
     // document.querySelector('#feedbackBeach').change();
     
-    beachList = allBeachData.filter(function (beach) {
+    locationList = beachList.filter(function (beach) {
         // console.log(beach)
-        return beach.title.includes(selectedMapBeachMarker.value);
+        return beach.beachName.includes(selectedMapBeachMarker.value);
     })
     console.log(beachList);
+    
     addLocationOption(event, selectedMapBeachMarker.value);
 }
 
@@ -185,7 +186,6 @@ feedbackBeachFilter.addEventListener('change', addLocationOption)
 
 
 function createBeachFilterOption(beachName) {
-
     let newOption = document.createElement('option');
     newOption.setAttribute('value', beachName);
     newOption.textContent = beachName;
@@ -199,22 +199,124 @@ function clearFeedbackBeachOption() {
     feedbackBeachFilter.innerHTML = `<option selected disabled hidden>選擇海灘名稱</option>`;
 }
 
+let locationList = [];
+let locationMarkers = [];
+let colorSwitch = true;
+
 function addLocationOption(event, beachName) {
     clearCityBeachMarkers();
     clearFeedbackLocationOption();
-    let currentBeach = this.value || beachName;
+    clearLocationMarkers();
+    removeReportSealine();
+
+    if (feedbackInfoWindow !== undefined) {
+        feedbackInfoWindow.close();
+    }
+    if (selectMarker !== undefined){
+        selectMarker.setMap(null);
+    }
+    let currentBeach; 
+    if (event.target === undefined){
+        currentBeach = beachName;
+    } else {
+        currentBeach = event.target.value;
+        document.querySelector('#feedbackBeach').value = this.value;
+    }
     console.log(currentBeach)
-    let locationList = beachList.filter(function (beach) {
+    locationList = beachList.filter(function (beach) {
         return beach.beachName.includes(currentBeach);
     })
+    console.table(beachList)
     console.table(locationList);
     let locationNamesArray = [];
+
+
     locationList.forEach(function (location) {
         if (locationNamesArray.includes(location.title) === false) {
             locationNamesArray.push(location.title);
             createFeedbackLocationOption(location.title);
         }
     })
+
+    locationList.forEach(function(location, index){
+        // console.log(location.contact)
+            let locationCoord = location.geojson.reduce(function (accumulator, currentValue) {
+                // console.log(accumulator, currentValue)
+                return [(accumulator[0]) + (currentValue[0]) / location.geojson.length, (accumulator[1]) + (currentValue[1]) / location.geojson.length];
+            }, [0, 0]);
+
+            locationMarkers[index] = new google.maps.Marker({
+                position: { lat: locationCoord[1], lng: locationCoord[0] },
+                animation: google.maps.Animation.DROP,
+                // icon: markerIcon,
+                // activity: beach.title,
+                // city: beach.city,
+                sealinename: location.title,
+                // date: cleanDateArray[0],
+                // contact:JSON.parse(location.geojson),
+            });
+            google.maps.event.addListener(locationMarkers[index], 'click', showLocationWindow);
+            // console.log(beach.contact)
+    
+            let locationArray = [];
+            location.geojson.forEach(function (coord) {
+                let coordObj = { lat: coord[1], lng: coord[0] };
+                locationArray.push(coordObj);
+            });
+    
+            dataFeature = { geometry: new google.maps.Data.MultiLineString([locationArray]) };
+            reportMap.data.add(dataFeature);
+            reportMap.data.setStyle(function(f) {
+                if(colorSwitch) {
+                  fStrokeColor = 'blue';
+                  colorSwitch = false;
+                } else {
+                  fStrokeColor = 'yellow';
+                  colorSwitch = true;
+                }
+                return {
+                    strokeWeight: 10,
+                    strokeColor: fStrokeColor,
+                }
+              });
+    
+           
+            // cityBeachMarkers[index] = new google.maps.Marker({
+            //     position: {lat: tempCoord[1], lng:tempCoord[0]},
+            //     value:cityBeach.name,
+            // })
+            locationMarkers[index].setMap(reportMap);
+            // google.maps.event.addListener(cityBeachMarkers[index], 'click', selectMapBeach);
+    })
+}
+
+function showLocationWindow() {
+    var reportMarker = this;
+    // map.setZoom(12);
+    reportMap.setCenter(reportMarker.getPosition());
+    if (feedbackInfoWindow !== undefined) {
+        feedbackInfoWindow.close();
+    }
+    feedbackInfoWindow = new google.maps.InfoWindow({
+        content: '<p class = "feebackText">' + '回報位置' + '</p>'
+    });
+    feedbackInfoWindow.open(reportMap, reportMarker);
+    document.querySelector('#feedbackLocation').value = reportMarker.sealinename;
+    let feedbackDataFilter = beachList.filter(function (position) {
+        return position.title.includes(reportMarker.sealinename);
+    })
+    feedbackData = feedbackDataFilter[0];
+    console.log(feedbackData)
+}
+
+
+function clearLocationMarkers() {
+    for (var i = 0; i < locationMarkers.length; i++) {
+        if (locationMarkers[i]) {
+            locationMarkers[i].setMap(null);
+        }
+    }
+    locationMarkers = [];
 }
 
 const feedbackLocationFilter = document.querySelector('#feedbackLocation');
@@ -237,7 +339,6 @@ feedbackLocationFilter.addEventListener('change', selectFeedbackLocation);
 
 function selectFeedbackLocation(event) {
     console.clear();
-    
     let currentLocation = this.value;
     let currentLocationData = beachList.filter(function (position) {
         return position.title.includes(currentLocation);
@@ -247,10 +348,12 @@ function selectFeedbackLocation(event) {
     drawSelectPosition(currentLocationData[0]);
 }
 
+let selectMarker;
+
 function drawSelectPosition(dataObj) {
-    removeReportSealine();
-    if (reportMarker !== undefined){
-        reportMarker.setMap(null);
+    // removeReportSealine();
+    if (selectMarker !== undefined){
+        selectMarker.setMap(null);
     }
     console.log(dataObj);
     let coord = dataObj.geojson.reduce(function (accumulator, currentValue) {
@@ -258,11 +361,10 @@ function drawSelectPosition(dataObj) {
         return [(accumulator[0]) + (currentValue[0]) / dataObj.geojson.length, (accumulator[1]) + (currentValue[1]) / dataObj.geojson.length];
     }, [0, 0]);
 
-    reportMarker = new google.maps.Marker({
+    selectMarker = new google.maps.Marker({
         position: { lat: coord[1], lng: coord[0] },
-        animation: google.maps.Animation.DROP,
         map: reportMap,
-        draggable: true,
+        // draggable: true,
         // icon: markerIcon,
         // cityname: beach.cityname,
         // sealinename: beach.sealinename,
@@ -274,27 +376,30 @@ function drawSelectPosition(dataObj) {
     console.log(currentFeedbackPosition)
 
     reportMap.setCenter({lat: coord[1], lng: coord[0]});
-    reportMap.setZoom(16);
+    reportMap.setZoom(13);
 
-    let googleArray = [];
-    dataObj.geojson.forEach(function (coord) {
-        let coordObj = { lat: coord[1], lng: coord[0] };
-        googleArray.push(coordObj);
-    });
-    dataFeature = { geometry: new google.maps.Data.MultiLineString([googleArray]) };
+    // let googleArray = [];
+    // dataObj.geojson.forEach(function (coord) {
+    //     let coordObj = { lat: coord[1], lng: coord[0] };
+    //     googleArray.push(coordObj);
+    // });
+    // dataFeature = { geometry: new google.maps.Data.MultiLineString([googleArray]) };
 
-    reportMap.data.add(dataFeature);
-    reportMap.data.setStyle({
-        strokeWeight: 10,
-        strokeColor: 'blue',
-    });
+    // reportMap.data.add(dataFeature);
+    // reportMap.data.setStyle({
+    //     strokeWeight: 10,
+    //     strokeColor: 'blue',
+    // });
+    if (feedbackInfoWindow !== undefined) {
+        feedbackInfoWindow.close();
+    }
 
     feedbackInfoWindow = new google.maps.InfoWindow({
         content: '<p class = "feebackText">' + '回報位置' + '</p>'
     });
 
-    feedbackInfoWindow.open(reportMap, reportMarker);
-    google.maps.event.addListener(reportMarker, 'drag', showFeedbackWindow);
+    feedbackInfoWindow.open(reportMap, selectMarker);
+    // google.maps.event.addListener(reportMarker, 'drag', showFeedbackWindow);
 }
 
 //取得marker 移動座標
