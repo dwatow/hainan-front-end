@@ -295,7 +295,7 @@ function showActivityWindow(event) {
     document.getElementById('iw-host').textContent = contactWindow.name;
     document.getElementById('iw-phone').textContent = contactWindow.phone;
     console.log(marker);
-    showActive({
+    showActive ({
         "活動名稱": marker.activity,
         "城市": marker.city,
         "活動日期": marker.date,
@@ -321,7 +321,7 @@ function showReportWindow(event) {
 
     reportImage.style.backgroundImage = `url(${marker.url})`;
     console.log(marker);
-    showActive({
+    showActive ({
         "海攤": marker.sealinename,
         "城市": marker.cityname,
         "回報日期": marker.date,
@@ -329,3 +329,35 @@ function showReportWindow(event) {
         img: `<img src="${marker.url}" />`
     });
 };
+
+
+function showActive(data) {
+    const activeDetail = document.querySelector('#activeDetail');
+
+    //tr list to table
+    const table = document.createElement('table');
+    table.classList.add('table');
+    table.classList.add('table-striped');
+    table.classList.add('activeDetail');
+    for (key in data) {
+        const keyCell = document.createElement('td');
+        keyCell.setAttribute('scope', 'row');
+        const valueCell = document.createElement('td');
+        keyCell.innerHTML = key;
+        valueCell.innerHTML = data[key];
+
+        const tr = document.createElement('tr');
+
+        if (key === "img") {
+            keyCell.innerHTML = data[key];
+            keyCell.setAttribute('colspan', '2')
+            tr.appendChild(keyCell);
+        }
+        else {
+            tr.appendChild(keyCell);
+            tr.appendChild(valueCell);
+        }
+        table.appendChild(tr);
+    }
+    activeDetail.innerHTML = table.outerHTML;
+}

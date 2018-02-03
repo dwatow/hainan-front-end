@@ -15,7 +15,7 @@ function gotoActive (isCreateActive = true) {
 
     // 切換 活動 button
     const activeRadio = document.querySelector(`#isCreateButton`);
-    activeRadio.checked = isCreateActive;
+    activeRadio || activeRadio.checked = isCreateActive;
 
     // 換頁
     active.checked = true;
@@ -45,7 +45,7 @@ function changeArticleForLogin () {
     `;
     if (router.currHash() !== 'index') {
         $(`[data-section="${router.currHash()}"]`).html(htmlLogin);
-        $('.login').on(gotoLoginUrl);
+        $('.login').on( 'click',gotoLoginUrl);
     }
 }
 
