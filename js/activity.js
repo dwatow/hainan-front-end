@@ -10,7 +10,7 @@ function addActivityBeachOption(event, currCityName) {
     clearActivityLocationOption();
     let activityCity = this.value || currCityName;
     // console.log(activityCity);
-    let activityBeach = allBeachData.filter(function (beach) {
+    activityCityBeachList = allBeachData.filter(function (beach) {
         return beach.city.includes(activityCity);
     })
     // console.table(activityBeach)

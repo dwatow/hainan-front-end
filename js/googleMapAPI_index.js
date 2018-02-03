@@ -145,7 +145,10 @@ function dropActivityMarker() {
     });
 };
 
+let feedbackSwitch = true;
+
 function dropReportMarker() {
+    console.log('test')
     removeAllSealine();
     clearResults();
     clearMarkers();
@@ -158,14 +161,13 @@ function dropReportMarker() {
     
     organizedReportData.forEach(function(beach, index){
         let markerLetter = String.fromCharCode('A'.charCodeAt(0) + (index % 26));
-        let lineColor = true;
 
         if (beach.beachClean === true) {
             var markerIcon = `./css/GoogleMarkers/blue_Marker${markerLetter}.png`;
-            lineColor = true;
+            feedbackSwitch = true;
         } else {
             var markerIcon = `./css/GoogleMarkers/red_Marker${markerLetter}.png`;
-            lineColor = false;
+            feedbackSwitch = false;
         }
 
         // console.log(markerIcon)
@@ -194,24 +196,34 @@ function dropReportMarker() {
             let coordObj = { lat: coord[1], lng: coord[0] };
             googleArray.push(coordObj);
         });
-        dataFeature = { geometry: new google.maps.Data.MultiLineString([googleArray]) };
+        dataFeature = { 
+            geometry: new google.maps.Data.MultiLineString([googleArray]), 
+         };
+
+        //  if (beach.beachClean === true) {
+        //      dataFeature.setProperty({clean:'yes'});
+        //  }
 
 
         map.data.add(dataFeature);
+        // map.data.overrideStyle(dataFeature, {
+        //     strokeColor:'red',
+        //     opacity:0.5
+        //  });
         map.data.setStyle(function(dataFeature) {
-            var color;
-            if(lineColor) {
-              color = '#e4a13d';
-              console.log(color);
-            //   colorSwitch = false;
-            } else {
-              color = 'blue';
-              console.log(color);
-            //   colorSwitch = true;
-            }
+            // var color;
+            // if(feedbackSwitch) {
+            //   color = '#e4a13d';
+            //   console.log(color);
+            //   feedbackSwitch = false;
+            // } else {
+            //   color = 'blue';
+            //   console.log(color);
+            //   feedbackSwitch = true;
+            // }
             return {
                 strokeWeight: 12,
-                strokeColor: color,
+                strokeColor: '#e4a13d',
             }
         });
 

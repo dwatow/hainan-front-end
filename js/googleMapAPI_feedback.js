@@ -60,7 +60,6 @@ function initReportMap() {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
             };
-
             peopleInfoWindow.setPosition(pos);
             peopleInfoWindow.setContent('你在這裡');
             reportMap.setCenter(pos);
@@ -109,9 +108,6 @@ function addBeachOption(event) {
     let cityData = taiwanCityData.filter(function(city){
         return city.cityName.includes(currentCity)
     })
-
-
-
     let cityCoord = cityData[0].position;
     // reportMap.setCenter(cityCoord);
     // reportMap.setZoom(8);
@@ -136,7 +132,6 @@ function addBeachOption(event) {
     });
 
     console.log(allcityBeachArray)
-
 
     // console.log(maxLat(allcityBeachArray))
     allcityBeachArray.forEach(function(cityBeach, index){
