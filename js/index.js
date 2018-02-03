@@ -42,6 +42,8 @@ function checkoutLogin(success) {
         // success();
     }
     // check login ok then remove
+    console.log('success');
+    $('.login').remove();
     success();
 }
 
