@@ -6,16 +6,34 @@ router.add('active', () => checkoutLogin(gotoActive, changeArticleForLogin));
 router.add('feedback', () => checkoutLogin(gotoFeedback, changeArticleForLogin));
 router.add('logout', () => logout());
 
+function checkoutLogin(success, error) {
+    console.log('checkoutLogin');
+    const id = localStorage.getItem('id');
+    typeof success !== "function" || success();
+    if (id !== null) {
+        // check login ok then add
+        console.log('login success');
+        // $('.login').remove();
+    }
+    else {
+        typeof error !== "function" || error();
+    }
+    // check login ok then remove
+}
+
+
 function gotoIndex() {
     index.checked = true;
 }
 
-
-function gotoActive (activeEvent = 'activitySubmitButton') {
+function gotoActive (isCreateActive = true) {
 
     // 切換 活動 button
-    const activeRadio = document.querySelector(`#${activeEvent}`);
-    activeRadio.checked = true;
+    const activeRadio = document.querySelector(`#isCreateButton`);
+    if (activeRadio) {
+        activeRadio.checked = isCreateActive;
+    }
+
 
     // 換頁
     active.checked = true;
@@ -45,23 +63,8 @@ function changeArticleForLogin () {
     `;
     if (router.currHash() !== 'index') {
         $(`[data-section="${router.currHash()}"]`).html(htmlLogin);
-        $('.login').on(gotoLoginUrl);
+        $('.login').on( 'click',gotoLoginUrl);
     }
-}
-
-function checkoutLogin(success, error) {
-    const id = localStorage.getItem('id');
-    typeof success !== "function" || success();
-    if (id !== null) {
-        // check login ok then add
-        console.log('login success');
-        // $('.login').remove();
-    }
-    else {
-
-        typeof error !== "function" || error();
-    }
-    // check login ok then remove
 }
 
 $(document).ready(() => {
@@ -97,35 +100,4 @@ const listing = document.querySelector('#listing');
 listing.addEventListener('click', () => {
     mapsList.checked = false;
 
-    //之後接到 API 成功時，在非同步時做這件事。現在先假裝有在跑。
-    showActive({
-        beach: "某個海灘",
-        city: "城市",
-        date: "活動日期",
-        location: "集合地點",
-        host: "聯絡人",
-        phone: "聯絡電話"
-    });
 })
-
-
-function showActive(data) {
-    const activeDetail = document.querySelector('#activeDetail');
-
-    //tr list to table
-    const table = document.createElement('table');
-    table.classList.add('table');
-    table.classList.add('table-striped');
-    for (key in data) {
-        const keyCell = document.createElement('td');
-        const valueCell = document.createElement('td');
-        keyCell.textContent = key;
-        valueCell.textContent = data[key];
-
-        const tr = document.createElement('tr');
-        tr.appendChild(keyCell);
-        tr.appendChild(valueCell);
-        table.appendChild(tr);
-    }
-    activeDetail.innerHTML = table.outerHTML;
-}
