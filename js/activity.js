@@ -95,9 +95,14 @@ activityDeleteButton.addEventListener('click', deleteActivity);
 const activityModifyButton = document.querySelector('.activityModify');
 activityModifyButton.addEventListener('click', modifyActivity);
 
-let activeId;
-if (document.querySelector('.editActive')) {
-    activeId = document.querySelector('.editActive').dataset.id;
+
+function getActiveIdByButton() {
+    if (document.querySelector('.editActive')) {
+        return document.querySelector('.editActive').dataset.id;
+    }
+    else {
+        return '';
+    }
 }
 
 const activityName = document.querySelector('#activeName');
@@ -225,11 +230,13 @@ function sendModifyActivity() {
         "place": assembleLocation.value,
         "refURL": assembleURL.value
     }
+    const activeId = getActiveIdByButton();
 
+    console.log('https://hainan-api.oss.tw/api/beach/activity/?id=' + activeId);
 
     $.ajax({
         //settings
-        url: `https://hainan-api.oss.tw/api/beach/activity/?id=${targetActivityData.id}`,
+        url: 'https://hainan-api.oss.tw/api/beach/activity/?id=' + activeId,
         type: 'PUT',
         data: activityReport,
         dataType:'json',
@@ -249,9 +256,12 @@ function sendModifyActivity() {
 }
 
 function sendDeleteActivity() {
+    console.log(targetActivityData);
+    const activeId = getActiveIdByButton();
+    console.log('https://hainan-api.oss.tw/api/beach/activity/?id=' + activeId);
     $.ajax({
         //settings
-        url: 'https://hainan-api.oss.tw/api/beach/activity/?id=${targetActivityData.id}',
+        url: 'https://hainan-api.oss.tw/api/beach/activity/?id=' + activeId,
         type: 'DELETE',
         // data: activityReport,
         // dataType:'json',
@@ -269,16 +279,3 @@ function sendDeleteActivity() {
         }
     });
 }
-
-const activityDeleteBtn = document.querySelector('.activityDelete');
-activityDeleteBtn.addEventListener('click', deleteActivity);
-
-function deleteActivity() {
-    let deleteConfirm = confirm("確認刪除該活動嗎？");
-    if (deleteConfirm === true) {
-        console.log('刪除成功');
-        //delete activityfunction
-    } else {
-        console.log('取消刪除')
-    }
-};
