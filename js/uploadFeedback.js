@@ -170,16 +170,21 @@ function uploadToServer(url) {
 
 
     let checkHistory = reportData.some(function(beach){
-        return beach.id === feedbackData.id
+        return beach.targetID === feedbackData.id
     })
+
+    console.log(checkHistory)
 
     if (checkHistory ===true) {
         let reportHistory = reportData.filter(function(beach){
-            return beachList.id = feedbackData.id;
+            return beach.targetID === feedbackData.id;
         })[0];
+        // console.log()
+        console.log(reportHistory.targetID);
+        console.log(feedbackData);
 
         let putReport = {
-            "id": reportHistory.id,
+            "id": reportHistory.targetID,
             "description": feedbackDescription.value,
             "imageURL": url,
             "beachClean": cleanStatus,
@@ -200,6 +205,7 @@ function uploadToServer(url) {
 }
 
 function postToServer(feedbackReport){
+    console.log(feedbackReport)
     $.ajax({
         //settings
         url: 'https://hainan-api.oss.tw/api/beach/notification',
@@ -212,9 +218,10 @@ function postToServer(feedbackReport){
         //handles response
         success(response) {
             console.log(response.result);
+            console.log('post');
             $.unblockUI();
             window.alert('上傳成功！')
-            window.location.assign("https://hainan.oss.tw/#!index");
+            // window.location.assign("https://hainan.oss.tw/#!index");
         },
         error(jqXHR, status, errorThrown) {
             console.log(jqXHR);
@@ -222,12 +229,13 @@ function postToServer(feedbackReport){
     });
 }
 
-function putToServer(feedbackReport){
+function putToServer(putReport){
+    console.log(putReport)
     $.ajax({
         //settings
-        url: `https://hainan-api.oss.tw/api/beach/notification?id=${feedbackReport.targetID}`,
+        url: `https://hainan-api.oss.tw/api/beach/notification?id=${putReport.id}`,
         type: 'PUT',
-        data: feedbackReport,
+        data: putReport,
         dataType: 'json',
         headers: {
             'x-access-token': getSid()
@@ -235,12 +243,18 @@ function putToServer(feedbackReport){
         //handles response
         success(response) {
             console.log(response.result);
+            console.log('put');
             $.unblockUI();
             window.alert('上傳成功！')
-            window.location.assign("https://hainan.oss.tw/#!index");
+            // window.location.assign("https://hainan.oss.tw/#!index");
         },
         error(jqXHR, status, errorThrown) {
             console.log(jqXHR);
         }
     });
 }
+
+
+
+
+

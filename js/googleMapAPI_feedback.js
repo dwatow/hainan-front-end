@@ -318,7 +318,7 @@ function showLocationWindow() {
         return position.title.includes(reportMarker.sealinename);
     })
     feedbackData = feedbackDataFilter[0];
-    console.log(feedbackData)
+    // console.log(feedbackData)
 }
 
 
