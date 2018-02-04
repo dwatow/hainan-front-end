@@ -9,11 +9,11 @@ $.ajax({
     dataType: 'json',
     success: function (response) {
         activityData = response.result;
-        console.log(activityData)
+        // console.log(activityData)
         initIndexMap();
     },
     error: function (jqXHR, status, errorThrown) {
-        console.log(jqXHR);
+        // console.log(jqXHR);
     }
 })
 
@@ -24,10 +24,10 @@ $.ajax({
     dataType: 'json',
     success: function (response) {
         reportData = response.result;
-        console.log(reportData);
+        // console.log(reportData);
     },
     error: function (jqXHR, status, errorThrown) {
-        console.log(jqXHR);
+        // console.log(jqXHR);
     }
 })
 
@@ -61,7 +61,7 @@ let map;
 let activityInfoWindow;
 let reportInfoWindow;
 function initIndexMap() {
-    console.log('initMap Success')
+    // console.log('initMap Success')
     //HomePage Map
     if (map === undefined) {
         map = new google.maps.Map(document.getElementById('map'), {
@@ -108,32 +108,43 @@ function dropActivityMarker() {
     }).slice(0, 50);
     // console.table(organizedactivityData)
 
-    organizedActivityData.forEach(function(beach, index){
+    organizedActivityData.forEach(function(activity, index){
         let markerLetter = String.fromCharCode('A'.charCodeAt(0) + (index % 26));
         let markerIcon = `./css/GoogleMarkers/green_Marker${markerLetter}.png`;
-        let coord = beach.geojson.reduce(function (accumulator, currentValue) {
+        let coord = activity.geojson.reduce(function (accumulator, currentValue) {
             // console.log(accumulator, currentValue)
-            return [(accumulator[0]) + (currentValue[0]) / beach.geojson.length, (accumulator[1]) + (currentValue[1]) / beach.geojson.length];
+            return [(accumulator[0]) + (currentValue[0]) / activity.geojson.length, (accumulator[1]) + (currentValue[1]) / activity.geojson.length];
         }, [0, 0]);
 
-        let cleanDateArray = beach.dateTime.split('T');
+        let cleanDateArray = activity.dateTime.split('T');
+        // console.log(activity);
 
         markers[index] = new google.maps.Marker({
-            activeId: beach.id,
+            id: activity.id,
             position: { lat: coord[1], lng: coord[0] },
             animation: google.maps.Animation.DROP,
             icon: markerIcon,
-            activity: beach.title,
-            city: beach.city,
-            sealinename: beach.beachTitle,
+            activityTitle: activity.title,
+            city: activity.city,
+            beachame: activity.beachName,
+            beachTitle: activity.beachTitle,
             date: cleanDateArray[0],
-            contact:JSON.parse(beach.contact),
+            collectionPlace: activity.place,
+            contact:JSON.parse(activity.contact),
         });
 
+<<<<<<< HEAD
         // console.log(beach.contact)
+=======
+
+        // beachName: "洲子灣海岸"
+        // beachTitle: "洲子灣海岸-2"
+
+        // console.log(activity.contact)
+>>>>>>> 1df40055b69f01e82deb98ab222e994fc557a1a8
 
         let googleArray = [];
-        beach.geojson.forEach(function (coord) {
+        activity.geojson.forEach(function (coord) {
             let coordObj = { lat: coord[1], lng: coord[0] };
             googleArray.push(coordObj);
         });
@@ -147,14 +158,14 @@ function dropActivityMarker() {
 
         google.maps.event.addListener(markers[index], 'click', showActivityWindow);
         setTimeout(dropMarker(index), index * 5);
-        addResult(beach, index, markerIcon);
+        addResult(activity, index, markerIcon);
     });
 };
 
 let feedbackSwitch = true;
 
 function dropReportMarker() {
-    console.log('test')
+    // console.log('test')
     removeAllSealine();
     clearResults();
     clearMarkers();
@@ -189,17 +200,18 @@ function dropReportMarker() {
         }, [0, 0]);
 
         let feedbackDateArray = beach.updateDate.split('T');
-
+        // console.log(beach);
         markers[index] = new google.maps.Marker({
-            activeId: beach.id,
+            id: beach.id,
             position: { lat: coord[1], lng: coord[0] },
             animation: google.maps.Animation.DROP,
             icon: markerIcon,
-            cityname: beach.city,
-            sealinename: beach.beachName,
+            city: beach.city,
+            beachName: beach.beachName,
+            beachTitle: beach.title,
             date: feedbackDateArray[0],
-            clean: beach.beachClean,
-            url:beach.imageURL
+            isClean: beach.beachClean,
+            url: beach.imageURL
         });
 
         let googleArray = [];
@@ -312,24 +324,24 @@ function showActivityWindow(event) {
     //開啟infoWindow
     let contactWindow = marker.contact;
     // let contactWindow = JSON.parse(marker.contact);
-    console.log(contactWindow)
+    // console.log(contactWindow)
     activityInfoWindow.open(map, marker);
-    document.getElementById('activity').innerHTML = `${marker.activity}`;
-    document.getElementById('iw-beach').textContent = marker. sealinename;
+    document.getElementById('activity').innerHTML = `${marker.activityTitle}`;
+    document.getElementById('iw-beach').textContent = marker. beachTitle;
     // document.getElementById('iw-city').textContent = marker.cityname;
     document.getElementById('iw-date').textContent = marker.date;
     // document.getElementById('iw-location').textContent = 'location';
     document.getElementById('iw-host').textContent = contactWindow.name;
     document.getElementById('iw-phone').textContent = contactWindow.phone;
-    // console.log(marker);
+    console.log(marker);
     showActive ({
-        "活動名稱": marker.activity,
+        "活動名稱": marker.activityTitle,
         "城市": marker.city,
         "活動日期": marker.date,
-        "集合地點": marker.sealinename,
+        "集合地點": marker.place,
         "聯絡人": marker.contact.name,
         "聯絡電話": marker.contact.phone,
-        button: marker.activeId
+        modifyActivityButton: marker.id
     });
 };
 
@@ -339,7 +351,7 @@ function showReportWindow(event) {
     map.setCenter(marker.getPosition());
     //開啟infoWindow
     reportInfoWindow.open(map, marker);
-    document.getElementById('report').innerHTML = `${marker.sealinename}`;
+    document.getElementById('report').innerHTML = `${marker.beachTitle}`;
     document.getElementById('iw-reportDate').textContent = marker.date;
     if (marker.clean) {
         document.getElementById('iw-clean').textContent = "否";
@@ -350,12 +362,13 @@ function showReportWindow(event) {
     reportImage.style.backgroundImage = `url(${marker.url})`;
     // console.log(marker);
     showActive ({
-        "海攤": marker.sealinename,
-        "城市": marker.cityname,
+        "海攤": marker.beachTitle,
+        "城市": marker.city,
         "回報日期": marker.date,
-        "是否需要淨攤": marker.clean? "需要" : "不需要",
+        "是否需要淨攤": marker.isClean? "需要" : "不需要",
         img: `<img src="${marker.url}" />`,
-        button: marker.activeId
+        // button: marker.activeId
+        createActivityButton: marker.id
     });
 };
 
@@ -382,7 +395,7 @@ function showActive(data) {
             keyCell.setAttribute('colspan', '2')
             tr.appendChild(keyCell);
         }
-        else if (key === "button") {
+        else if (key === "modifyActivityButton") {
             const alink = document.createElement('a');
             alink.href = "#active";
             const button = document.createElement('button');
@@ -392,6 +405,22 @@ function showActive(data) {
             button.dataset.id = data[key];
             button.setAttribute('type', 'button');
             button.textContent = "變更活動 >>";
+            alink.appendChild(button);
+            keyCell.innerHTML = alink.outerHTML;
+            keyCell.setAttribute('colspan', '2')
+            keyCell.classList.add('text-right');
+            tr.appendChild(keyCell);
+        }
+        else if (key === 'createActivityButton') {
+            const alink = document.createElement('a');
+            alink.href = "#active";
+            const button = document.createElement('button');
+            button.classList.add('btn');
+            button.classList.add('btn-warning');
+            button.classList.add('tran2Active');
+            button.dataset.id = data[key];
+            button.setAttribute('type', 'button');
+            button.textContent = "發起活動 >>";
             alink.appendChild(button);
             keyCell.innerHTML = alink.outerHTML;
             keyCell.setAttribute('colspan', '2')
@@ -413,7 +442,7 @@ function showActive(data) {
         gotoActive(false);
 
         const active = activityData.filter((item) => item.id === id).shift();
-        console.log(active);
+        // console.log(active);
         const contact = JSON.parse(active.contact)
         $('#activeName').val(active.title);
         $('#activityCity').val(active.city);
@@ -433,6 +462,33 @@ function showActive(data) {
         $('#assembleLocation').val(active.place);
         $('#assembleURL').val(active.refURL);
     });
+
+    $('.tran2Active').on('click', (e) => {
+        router.go('active');
+        gotoActive(true);
+
+        const id = $(e.currentTarget).data('id');
+        const report = reportData.filter((item) => item.id === id).shift();
+        // console.log('report', report);
+        // $('#activeName').val(report.title);
+        $('#activityCity').val(report.city);
+        addActivityBeachOption(e, report.city);
+        //
+        $('#activityBeach').val(report.beachName);
+        addActivityLocationOption(e, report.beachName);
+        //
+        $('#activityLocation').val(report.title);
+        // $('#activeDescription').val(report.description);
+
+        // const contact = JSON.parse(report.contact)
+        // $('#activeOwner').val(contact.name);
+        // $('#activeOwnerPhone').val(contact.phone);
+
+        // $('#assembleDateTime').val(report.dateTime.slice(0, 10));
+
+        // $('#assembleLocation').val(report.place);
+        // $('#assembleURL').val(report.refURL);
+    })
 }
 
 

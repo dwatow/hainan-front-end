@@ -170,6 +170,12 @@ footer {
 }
 
 /* line 59, ../sass/index.scss */
+#isEditActive {
+  opacity: 0;
+  position: absolute;
+}
+
+/* line 64, ../sass/index.scss */
 #isEditActive ~ #activeDetail .editActive {
   display: inline-block;
 }
