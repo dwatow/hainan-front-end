@@ -61,18 +61,8 @@ function addActivityLocationOption(event, currBeachName) {
     })
 }
 function createLocationFilterOption(locationName) {
-    console.log(locationName)
-    let targetLocation = allBeachData.filter(function (activity) {
-        return activity.title === locationName
-    })
-
     let newOption = document.createElement('option');
-
-    let beachID = targetLocation[0].id;
-
-    newOption.setAttribute('value', `${locationName}_${beachID}`);
-
-
+    newOption.setAttribute('value', locationName);
     newOption.textContent = locationName;
     activityLocationFilter.appendChild(newOption);
 }
@@ -89,16 +79,8 @@ activityLocationFilter.addEventListener('change', selectActivityPosition);
 var targetActivityData;
 function selectActivityPosition(event, beachTitle) {
     console.clear();
-    console.log(this.value);
-    console.log(beachTitle);
-
-    let title;
-    if (this.value){
-        title = this.value.split('_').shift()
-    }
-
-    let currentActivityLocation = title || beachTitle;
-    console.log(currentActivityLocation);
+    console.log(allBeachData);
+    let currentActivityLocation = this.value || beachTitle;
     let selectActivityLocation = allBeachData.filter(function (position) {
         return position.title.includes(currentActivityLocation);
     })
@@ -113,14 +95,9 @@ activityDeleteButton.addEventListener('click', deleteActivity);
 const activityModifyButton = document.querySelector('.activityModify');
 activityModifyButton.addEventListener('click', modifyActivity);
 
-
-function getActiveIdByButton() {
-    if (document.querySelector('.editActive')) {
-        return document.querySelector('.editActive').dataset.id;
-    }
-    else {
-        return '';
-    }
+let activeId;
+if (document.querySelector('.editActive')) {
+    activeId = document.querySelector('.editActive').dataset.id;
 }
 
 const activityName = document.querySelector('#activeName');
@@ -131,7 +108,7 @@ const assembleDate = document.querySelector('#assembleDateTime');
 const assembleLocation = document.querySelector('#assembleLocation');
 const assembleURL = document.querySelector('#assembleURL');
 
-function confirmActivity() {
+function confirmActivity () {
     if (activityName.value === "") {
         window.alert('請輸入活動名稱！');
     } else if (activityLocationFilter.value === "選擇海灘分段") {
@@ -154,7 +131,7 @@ function confirmActivity() {
     return false;
 }
 
-function loading() {
+function loading () {
     $.blockUI({
         message: '<h5>資料上傳中...</h5>',
         css: {
@@ -165,8 +142,8 @@ function loading() {
             '-moz-border-radius': '10px',
             opacity: .7,
             color: '#fff',
-            left: '25%',
-            width: '50%'
+            left:'25%',
+            width:'50%'
         }
     });
 }
@@ -202,7 +179,7 @@ function deleteActivity() {
 }
 
 function sendCreateActivity() {
-    let contactInfo = { name: activityOwner.value, phone: activityOwnerPhone.value }
+    let contactInfo = {name:activityOwner.value, phone:activityOwnerPhone.value}
 
     let activityReport = {
         "targetID": targetActivityData.id,
@@ -219,7 +196,7 @@ function sendCreateActivity() {
         url: 'https://hainan-api.oss.tw/api/beach/activity',
         type: 'POST',
         data: activityReport,
-        dataType: 'json',
+        dataType:'json',
         headers: {
             'x-access-token': getSid()
         },
@@ -228,8 +205,7 @@ function sendCreateActivity() {
             $.unblockUI();
             window.alert('上傳成功！')
             window.location.assign("https://hainan.oss.tw/#!index");
-            location.reload();
-
+            setTimeout(() => {location.reload()}, 500);
         },
         error(jqXHR, status, errorThrown) {
             console.log(jqXHR);
@@ -238,11 +214,11 @@ function sendCreateActivity() {
 }
 
 function sendModifyActivity() {
-    let contactInfo = { name: activityOwner.value, phone: activityOwnerPhone.value }
+    let contactInfo = {name:activityOwner.value, phone:activityOwnerPhone.value}
 
     console.log(targetActivityData);
     let activityReport = {
-        "targetID": activityLocation.value.split('_').pop(),
+        "targetID": targetActivityData.id,
         "title": activityName.value,
         "description": activityDescription.value,
         "contact": JSON.stringify(contactInfo),
@@ -250,16 +226,14 @@ function sendModifyActivity() {
         "place": assembleLocation.value,
         "refURL": assembleURL.value
     }
-    const activeId = getActiveIdByButton();
 
-    console.log('https://hainan-api.oss.tw/api/beach/activity/?id=' + activeId);
 
     $.ajax({
         //settings
-        url: 'https://hainan-api.oss.tw/api/beach/activity/?id=' + activeId,
+        url: `https://hainan-api.oss.tw/api/beach/activity/?id=${targetActivityData.id}`,
         type: 'PUT',
         data: activityReport,
-        dataType: 'json',
+        dataType:'json',
         headers: {
             'x-access-token': getSid()
         },
@@ -268,8 +242,7 @@ function sendModifyActivity() {
             $.unblockUI();
             window.alert('上傳成功！')
             window.location.assign("https://hainan.oss.tw/#!index");
-            location.reload();
-
+            setTimeout(() => {location.reload()}, 500);
         },
         error(jqXHR, status, errorThrown) {
             console.log(jqXHR);
@@ -278,12 +251,9 @@ function sendModifyActivity() {
 }
 
 function sendDeleteActivity() {
-    console.log(targetActivityData);
-    const activeId = getActiveIdByButton();
-    console.log('https://hainan-api.oss.tw/api/beach/activity/?id=' + activeId);
     $.ajax({
         //settings
-        url: 'https://hainan-api.oss.tw/api/beach/activity/?id=' + activeId,
+        url: 'https://hainan-api.oss.tw/api/beach/activity/?id=${targetActivityData.id}',
         type: 'DELETE',
         // data: activityReport,
         // dataType:'json',
@@ -295,11 +265,23 @@ function sendDeleteActivity() {
             $.unblockUI();
             window.alert('刪除成功！')
             window.location.assign("https://hainan.oss.tw/#!index");
-            location.reload();
-
+            setTimeout(() => {location.reload()}, 500);
         },
         error(jqXHR, status, errorThrown) {
             console.log(jqXHR);
         }
     });
 }
+
+const activityDeleteBtn = document.querySelector('.activityDelete');
+activityDeleteBtn.addEventListener('click', deleteActivity);
+
+function deleteActivity() {
+    let deleteConfirm = confirm("確認刪除該活動嗎？");
+    if (deleteConfirm === true) {
+        console.log('刪除成功');
+        //delete activityfunction
+    } else {
+        console.log('取消刪除')
+    }
+};

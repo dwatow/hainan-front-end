@@ -221,7 +221,9 @@ function postToServer(feedbackReport){
             console.log('post');
             $.unblockUI();
             window.alert('上傳成功！')
+            
             window.location.assign("https://hainan.oss.tw/#!index");
+            setTimeout(() => {location.reload()}, 500);
         },
         error(jqXHR, status, errorThrown) {
             console.log(jqXHR);
@@ -247,7 +249,7 @@ function putToServer(putReport){
             $.unblockUI();
             window.alert('上傳成功！')
             window.location.assign("https://hainan.oss.tw/#!index");
-            location.reload();
+            setTimeout(() => {location.reload()}, 500);
         },
         error(jqXHR, status, errorThrown) {
             console.log(jqXHR);
