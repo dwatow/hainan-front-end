@@ -444,6 +444,8 @@ function showActive(data) {
         // console.log(active.beachName);
 
         $('#activityLocation').val(active.beachTitle);
+        selectActivityPosition(e, active.beachTitle);
+
         $('#activeDescription').val(active.description);
         $('#activeOwner').val(contact.name);
         $('#activeOwnerPhone').val(contact.phone);
@@ -467,7 +469,8 @@ function showActive(data) {
         $('#activityBeach').val(report.beachName);
         addActivityLocationOption(e, report.beachName);
         //
-        $('#activityLocation').val(report.title);
+        $('#activityLocation').val(report.title); //beach title
+        selectActivityPosition(e, report.title);
         // $('#activeDescription').val(report.description);
 
         // const contact = JSON.parse(report.contact)

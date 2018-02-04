@@ -50,7 +50,7 @@ function addActivityLocationOption(event, currBeachName) {
     let activityLocationList = allBeachData.filter(function (beach) {
         return beach.beachName.includes(currentActivityBeach);
     })
-    console.table(activityLocationList)
+    // console.table(activityLocationList)
     // console.table(locationList);
     let activityLocationArray = [];
     activityLocationList.forEach(function (location) {
@@ -76,15 +76,16 @@ function clearActivityLocationOption() {
 
 activityLocationFilter.addEventListener('change', selectActivityPosition);
 
-
-function selectActivityPosition(event) {
+var targetActivityData;
+function selectActivityPosition(event, beachTitle) {
     console.clear();
-    let currentActivityLocation = this.value;
+    console.log(allBeachData);
+    let currentActivityLocation = this.value || beachTitle;
     let selectActivityLocation = allBeachData.filter(function (position) {
         return position.title.includes(currentActivityLocation);
     })
-    activityData = selectActivityLocation[0];
-    console.log(activityData);
+    targetActivityData = selectActivityLocation[0];
+    console.log(targetActivityData);
 }
 
 const activitySubmitBotton = document.querySelector('.activitySubmit');
@@ -158,7 +159,6 @@ function createActivity() {
 }
 
 function modifyActivity() {
-    console.log(confirmActivity(), confirm("確認修改已發起的活動？"));
     if (confirmActivity() && confirm("確認修改已發起的活動？")) {
         loading();
         sendModifyActivity();
@@ -182,7 +182,7 @@ function sendCreateActivity() {
     let contactInfo = {name:activityOwner.value, phone:activityOwnerPhone.value}
 
     let activityReport = {
-        "targetID": activityData.id,
+        "targetID": targetActivityData.id,
         "title": activityName.value,
         "description": activityDescription.value,
         "contact": JSON.stringify(contactInfo),
@@ -215,8 +215,9 @@ function sendCreateActivity() {
 function sendModifyActivity() {
     let contactInfo = {name:activityOwner.value, phone:activityOwnerPhone.value}
 
+    console.log(targetActivityData);
     let activityReport = {
-        "targetID": activityData.id,
+        "targetID": targetActivityData.id,
         "title": activityName.value,
         "description": activityDescription.value,
         "contact": JSON.stringify(contactInfo),
@@ -225,9 +226,10 @@ function sendModifyActivity() {
         "refURL": assembleURL.value
     }
 
+
     $.ajax({
         //settings
-        url: `https://hainan-api.oss.tw/api/beach/activity/?id=${activeId}`,
+        url: `https://hainan-api.oss.tw/api/beach/activity/?id=${targetActivityData.id}`,
         type: 'PUT',
         data: activityReport,
         dataType:'json',
@@ -246,10 +248,10 @@ function sendModifyActivity() {
     });
 }
 
-function sendModifyActivity() {
+function sendDeleteActivity() {
     $.ajax({
         //settings
-        url: 'https://hainan-api.oss.tw/api/beach/activity/?id=${activeId}',
+        url: 'https://hainan-api.oss.tw/api/beach/activity/?id=${targetActivityData.id}',
         type: 'DELETE',
         // data: activityReport,
         // dataType:'json',
@@ -280,16 +282,3 @@ function deleteActivity() {
         console.log('取消刪除')
     }
 };
-//
-// const activityModifyBtn = document.querySelector('.activityModify');
-// activityModifyBtn.addEventListener('click', modifyActivity);
-//
-// function modifyActivity () {
-//     let modifyConfirm = confirm("確認修改活動資訊嗎？");
-//     if (modifyConfirm === true) {
-//         console.log('修改成功');
-//         //modify activity function
-//     } else {
-//         console.log('取消修改');
-//     }
-// };
