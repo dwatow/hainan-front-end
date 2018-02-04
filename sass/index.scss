@@ -56,6 +56,11 @@
     display: none;
 }
 
+#isEditActive {
+    opacity: 0;
+    position: absolute;
+}
+
 #isEditActive ~ #activeDetail .editActive {
     display: inline-block;
 }
