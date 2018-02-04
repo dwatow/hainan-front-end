@@ -135,11 +135,6 @@ function dropActivityMarker() {
             contact:JSON.parse(activity.contact),
         });
 
-<<<<<<< HEAD
-        // console.log(beach.contact)
-
-=======
->>>>>>> 8f1151c11c5d140368e250b7fb167a9719237f3e
         let googleArray = [];
         activity.geojson.forEach(function (coord) {
             let coordObj = { lat: coord[1], lng: coord[0] };
