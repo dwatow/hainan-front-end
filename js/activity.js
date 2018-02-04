@@ -61,8 +61,19 @@ function addActivityLocationOption(event, currBeachName) {
     })
 }
 function createLocationFilterOption(locationName) {
+    console.log(locationName)
+    let activityHistory = activityData.filter(function(activity){
+        return activity.beachTitle === locationName
+    })
+    console.log(activityHistory)
     let newOption = document.createElement('option');
-    newOption.setAttribute('value', locationName);
+    if (activityHistory[0] !== undefined) {
+        let activityID = activityHistory[0].id;
+        newOption.setAttribute('value', `${locationName}_${activityID}`);
+    } else {
+        newOption.setAttribute('value', locationName);
+    }
+    
     newOption.textContent = locationName;
     activityLocationFilter.appendChild(newOption);
 }
@@ -79,7 +90,7 @@ activityLocationFilter.addEventListener('change', selectActivityPosition);
 var targetActivityData;
 function selectActivityPosition(event, beachTitle) {
     console.clear();
-    console.log(allBeachData);
+    console.log(this.value);
     let currentActivityLocation = this.value || beachTitle;
     let selectActivityLocation = allBeachData.filter(function (position) {
         return position.title.includes(currentActivityLocation);
