@@ -449,7 +449,7 @@ function showActive(data) {
         }).shift();
 
         addActivityLocationOption(e, active.beachName);
-        $('#activityLocation').val(active.beachTitle + '_' + beach);
+        $('#activityLocation').val(active.beachTitle + '_' + beach.id);
 
         // selectActivityPosition(e, active.beachTitle);
 
