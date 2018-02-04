@@ -9,7 +9,7 @@ $.ajax({
     dataType: 'json',
     success: function (response) {
         activityData = response.result;
-        // console.log(activityData)
+        console.log(activityData)
         initIndexMap();
     },
     error: function (jqXHR, status, errorThrown) {
