@@ -17,6 +17,7 @@ function checkoutLogin(success, error) {
 
 function gotoIndex() {
     index.checked = true;
+    $(window).one('hashchange', initIndexMap);
 }
 
 function gotoActive(isCreateActive = true) {

@@ -130,7 +130,7 @@ function dropActivityMarker() {
             contact:JSON.parse(beach.contact),
         });
 
-        console.log(beach.contact)
+        // console.log(beach.contact)
 
         let googleArray = [];
         beach.geojson.forEach(function (coord) {

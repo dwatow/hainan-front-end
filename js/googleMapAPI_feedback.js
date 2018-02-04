@@ -3,6 +3,7 @@ let reportMap;
 let feedbackInfoWindow;
 let beachList;
 let peopleInfoWindow;
+let peoplePosition;
 
 let allBeachData;
 let feedbackData;
@@ -39,8 +40,8 @@ function loadFeedbackMap() {
 let currentFeedbackPosition;
 
 function initReportMap() {
-    console.log(currentFeedbackPosition);
-    if (currentFeedbackPosition === undefined) {
+    // console.log(currentFeedbackPosition);
+    if (currentFeedbackPosition === undefined && peoplePosition === undefined) {
         reportMap = new google.maps.Map(document.getElementById('reportMap'), {
             center: { lat: 24.3, lng: 120.51 },
             zoom: 6,
@@ -48,24 +49,42 @@ function initReportMap() {
             fullscreenControl: false,
             streetViewControl: false,
         });
+        if (navigator.geolocation) {
+            peopleInfoWindow = new google.maps.InfoWindow({ map: reportMap });
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                peoplePosition = pos;
+                peopleInfoWindow.setPosition(pos);
+                peopleInfoWindow.setContent('你在這裡');
+                reportMap.setCenter(pos);
+                reportMap.setZoom(12);
+            })
+        }
+    } else if (currentFeedbackPosition === undefined) {
+        reportMap.setCenter(peoplePosition);
+        reportMap.setZoom(12) 
     } else {
         reportMap.setCenter(currentFeedbackPosition);
         reportMap.setZoom(16) 
-    };
-
-    if (navigator.geolocation) {
-        peopleInfoWindow = new google.maps.InfoWindow({ map: reportMap });
-        navigator.geolocation.getCurrentPosition(function (position) {
-            var pos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            };
-            peopleInfoWindow.setPosition(pos);
-            peopleInfoWindow.setContent('你在這裡');
-            reportMap.setCenter(pos);
-            reportMap.setZoom(12);
-        })
     }
+    // if (peoplePosition === undefined) {
+    //     if (navigator.geolocation) {
+    //         peopleInfoWindow = new google.maps.InfoWindow({ map: reportMap });
+    //         navigator.geolocation.getCurrentPosition(function (position) {
+    //             var pos = {
+    //                 lat: position.coords.latitude,
+    //                 lng: position.coords.longitude
+    //             };
+    //             peopleInfoWindow.setPosition(pos);
+    //             peopleInfoWindow.setContent('你在這裡');
+    //             reportMap.setCenter(pos);
+    //             reportMap.setZoom(12);
+    //         })
+    //     }
+    // }
 }
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     peopleInfoWindow.setPosition(pos);
@@ -144,7 +163,7 @@ function addBeachOption(event) {
     // console.log(maxLat(allcityBeachArray))
     allcityBeachArray.forEach(function(cityBeach, index){
         let tempCoord = cityBeach.coord[0];
-        console.log(tempCoord)
+        // console.log(tempCoord)
         cityBeachMarkers[index] = new google.maps.Marker({
             position: {lat: tempCoord[1], lng:tempCoord[0]},
             value:cityBeach.name,
@@ -165,7 +184,8 @@ function addBeachOption(event) {
 
 function selectMapBeach (event) {
     let selectedMapBeachMarker = this;
-    let selectedMapBeachOption = document.querySelector(`option[value = ${this.value}]`);
+    console.log(this.value)
+    let selectedMapBeachOption = document.querySelector(`option[value=${this.value}]`);
     // selectedMapBeachOption.selected=true;
     document.querySelector('#feedbackBeach').value = this.value;
     // $("#feedbackBeach").change();
