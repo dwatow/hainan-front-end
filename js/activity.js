@@ -92,7 +92,12 @@ function selectActivityPosition(event, beachTitle) {
     console.log(this.value);
     console.log(beachTitle);
 
-    let currentActivityLocation = this.value.split('_').shift() || beachTitle;
+    let title;
+    if (this.value){
+        title = this.value.split('_').shift()
+    }
+
+    let currentActivityLocation = title || beachTitle;
     console.log(currentActivityLocation);
     let selectActivityLocation = allBeachData.filter(function (position) {
         return position.title.includes(currentActivityLocation);
@@ -222,7 +227,9 @@ function sendCreateActivity() {
             console.log(response.result);
             $.unblockUI();
             window.alert('上傳成功！')
-            router.go("index");
+            window.location.assign("https://hainan.oss.tw/#!index");
+            location.reload();
+
         },
         error(jqXHR, status, errorThrown) {
             console.log(jqXHR);
@@ -260,7 +267,9 @@ function sendModifyActivity() {
             console.log(response.result);
             $.unblockUI();
             window.alert('上傳成功！')
-            router.go("index");
+            window.location.assign("https://hainan.oss.tw/#!index");
+            location.reload();
+
         },
         error(jqXHR, status, errorThrown) {
             console.log(jqXHR);
@@ -285,7 +294,9 @@ function sendDeleteActivity() {
             console.log(response.result);
             $.unblockUI();
             window.alert('刪除成功！')
-            router.go("index");
+            window.location.assign("https://hainan.oss.tw/#!index");
+            location.reload();
+
         },
         error(jqXHR, status, errorThrown) {
             console.log(jqXHR);

@@ -439,14 +439,19 @@ function showActive(data) {
         $('#activeName').val(active.title);
         $('#activityCity').val(active.city);
         // console.log(active.city);
-        addActivityBeachOption(e, active.city);
 
+        addActivityBeachOption(e, active.city);
         $('#activityBeach').val(active.beachName);
-        addActivityLocationOption(e, active.beachName);
         // console.log(active.beachName);
 
-        $('#activityLocation').val(active.beachTitle);
-        selectActivityPosition(e, active.beachTitle);
+        let beach = allBeachData.filter(function (position) {
+            return position.title.includes(active.beachTitle);
+        }).shift();
+
+        addActivityLocationOption(e, active.beachName);
+        $('#activityLocation').val(active.beachTitle + '_' + beach);
+
+        // selectActivityPosition(e, active.beachTitle);
 
         $('#activeDescription').val(active.description);
         $('#activeOwner').val(contact.name);
