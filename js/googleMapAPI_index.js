@@ -133,16 +133,6 @@ function dropActivityMarker() {
             contact:JSON.parse(activity.contact),
         });
 
-<<<<<<< HEAD
-        // console.log(beach.contact)
-=======
-
-        // beachName: "洲子灣海岸"
-        // beachTitle: "洲子灣海岸-2"
-
-        // console.log(activity.contact)
->>>>>>> 1df40055b69f01e82deb98ab222e994fc557a1a8
-
         let googleArray = [];
         activity.geojson.forEach(function (coord) {
             let coordObj = { lat: coord[1], lng: coord[0] };
