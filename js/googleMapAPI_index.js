@@ -135,8 +135,11 @@ function dropActivityMarker() {
             contact:JSON.parse(activity.contact),
         });
 
+<<<<<<< HEAD
         // console.log(beach.contact)
 
+=======
+>>>>>>> 8f1151c11c5d140368e250b7fb167a9719237f3e
         let googleArray = [];
         activity.geojson.forEach(function (coord) {
             let coordObj = { lat: coord[1], lng: coord[0] };
@@ -332,7 +335,7 @@ function showActivityWindow(event) {
         "活動名稱": marker.activityTitle,
         "城市": marker.city,
         "活動日期": marker.date,
-        "集合地點": marker.place,
+        "集合地點": marker.collectionPlace,
         "聯絡人": marker.contact.name,
         "聯絡電話": marker.contact.phone,
         modifyActivityButton: marker.id
