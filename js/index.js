@@ -95,6 +95,7 @@ function getSid() {
 }
 
 function demo() {
+    //只是用來單獨測試用的 API 無任何功能與它相關
     $.ajax({
         url: 'https://hainan-api.oss.tw/api/beach/testLogin',
         method: 'POST',

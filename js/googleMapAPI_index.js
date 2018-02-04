@@ -95,10 +95,15 @@ function dropActivityMarker() {
     clearMarkers();
     // console.log("dropActivityMarker")
 
-    let organizedActivityData = activityData.sort(function(a, b){
-        if (a.dateTime > b.dateTime) {
-            return 1;
-        }
+    let organizedActivityData = activityData.sort(function(a, b) {
+
+        const aArray = a.dateTime.split('-')
+        const aTime = new Date(aArray.shift(), aArray.shift(), aArray.shift().split('T').shift());
+
+        const bArray = b.dateTime.split('-')
+        const bTime = new Date(bArray.shift(), bArray.shift(), bArray.shift().split('T').shift());
+
+        return bTime - aTime;
     }).slice(0, 50);
     // console.table(organizedactivityData)
 
@@ -154,11 +159,16 @@ function dropReportMarker() {
     clearMarkers();
 
     let organizedReportData = reportData.sort(function(a, b){
-        if (a.updateDate > b.updateDate) {
-            return 1;
-        }
+
+        const aArray = a.updateDate.split('-')
+        const aTime = new Date(aArray.shift(), aArray.shift(), aArray.shift().split('T').shift());
+
+        const bArray = b.updateDate.split('-')
+        const bTime = new Date(bArray.shift(), bArray.shift(), bArray.shift().split('T').shift());
+
+        return bTime - aTime;
     }).slice(0, 50);
-    
+
     organizedReportData.forEach(function(beach, index){
         let markerLetter = String.fromCharCode('A'.charCodeAt(0) + (index % 26));
 
@@ -196,8 +206,8 @@ function dropReportMarker() {
             let coordObj = { lat: coord[1], lng: coord[0] };
             googleArray.push(coordObj);
         });
-        dataFeature = { 
-            geometry: new google.maps.Data.MultiLineString([googleArray]), 
+        dataFeature = {
+            geometry: new google.maps.Data.MultiLineString([googleArray]),
          };
 
         //  if (beach.beachClean === true) {
