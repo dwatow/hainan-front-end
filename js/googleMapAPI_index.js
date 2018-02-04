@@ -51,7 +51,8 @@ indexPage.addEventListener('click', loadIndexMap);
 
 // window.addEventListener('hashchange', initIndexMap);
 function loadIndexMap() {
-    displayFilter.value = "activities";
+    console.log("loadMap")
+    // displayFilter.value = "activities";
     window.addEventListener('hashchange', initIndexMap, { once: true });
 }
 
