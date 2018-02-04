@@ -204,7 +204,7 @@ function sendCreateActivity() {
             console.log(response.result);
             $.unblockUI();
             window.alert('上傳成功！')
-            window.location.assign("https://hainan.oss.tw/#!index");
+            router.go("index");
         },
         error(jqXHR, status, errorThrown) {
             console.log(jqXHR);
@@ -238,7 +238,7 @@ function sendModifyActivity() {
             console.log(response.result);
             $.unblockUI();
             window.alert('上傳成功！')
-            window.location.assign("https://hainan.oss.tw/#!index");
+            router.go("index");
         },
         error(jqXHR, status, errorThrown) {
             console.log(jqXHR);
@@ -260,7 +260,7 @@ function sendModifyActivity() {
             console.log(response.result);
             $.unblockUI();
             window.alert('刪除成功！')
-            window.location.assign("https://hainan.oss.tw/#!index");
+            router.go("index");
         },
         error(jqXHR, status, errorThrown) {
             console.log(jqXHR);
