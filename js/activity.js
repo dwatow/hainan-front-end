@@ -90,7 +90,10 @@ var targetActivityData;
 function selectActivityPosition(event, beachTitle) {
     console.clear();
     console.log(this.value);
-    let currentActivityLocation = this.value || beachTitle;
+    console.log(beachTitle);
+
+    let currentActivityLocation = this.value.split('_').shift() || beachTitle;
+    console.log(currentActivityLocation);
     let selectActivityLocation = allBeachData.filter(function (position) {
         return position.title.includes(currentActivityLocation);
     })
