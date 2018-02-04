@@ -53,7 +53,9 @@ indexPage.addEventListener('click', loadIndexMap);
 function loadIndexMap() {
     console.log("loadMap")
     // displayFilter.value = "activities";
-    window.addEventListener('hashchange', initIndexMap, { once: true });
+    // window.addEventListener('hashchange', initIndexMap, { once: true });
+    location.reload();
+    // window.location.assign("file:///Users/wangyuxiang/Documents/Fish/Git%20version/hainan-front-end/index.html#!index");
 }
 
 
