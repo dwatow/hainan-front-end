@@ -53,7 +53,9 @@ indexPage.addEventListener('click', loadIndexMap);
 function loadIndexMap() {
     console.log("loadMap")
     // displayFilter.value = "activities";
-    window.addEventListener('hashchange', initIndexMap, { once: true });
+    // window.addEventListener('hashchange', initIndexMap, { once: true });
+    location.reload();
+    // window.location.assign("file:///Users/wangyuxiang/Documents/Fish/Git%20version/hainan-front-end/index.html#!index");
 }
 
 
@@ -133,15 +135,7 @@ function dropActivityMarker() {
             contact:JSON.parse(activity.contact),
         });
 
-<<<<<<< HEAD
         // console.log(beach.contact)
-=======
-
-        // beachName: "洲子灣海岸"
-        // beachTitle: "洲子灣海岸-2"
-
-        // console.log(activity.contact)
->>>>>>> 1df40055b69f01e82deb98ab222e994fc557a1a8
 
         let googleArray = [];
         activity.geojson.forEach(function (coord) {

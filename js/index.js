@@ -17,7 +17,9 @@ function checkoutLogin(success, error) {
 
 function gotoIndex() {
     index.checked = true;
-    $(window).one('hashchange', initIndexMap);
+    // $(window).one('hashchange', initIndexMap);
+    // location.reload();
+    // setTimeout(initIndexMap, 500)
 }
 
 function gotoActive(isCreateActive = true) {
