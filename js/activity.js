@@ -62,18 +62,17 @@ function addActivityLocationOption(event, currBeachName) {
 }
 function createLocationFilterOption(locationName) {
     console.log(locationName)
-    let activityHistory = activityData.filter(function(activity){
-        return activity.beachTitle === locationName
+    let targetLocation = allBeachData.filter(function (activity) {
+        return activity.title === locationName
     })
-    console.log(activityHistory)
+
     let newOption = document.createElement('option');
-    if (activityHistory[0] !== undefined) {
-        let activityID = activityHistory[0].id;
-        newOption.setAttribute('value', `${locationName}_${activityID}`);
-    } else {
-        newOption.setAttribute('value', locationName);
-    }
-    
+
+    let beachID = targetLocation[0].id;
+
+    newOption.setAttribute('value', `${locationName}_${beachID}`);
+
+
     newOption.textContent = locationName;
     activityLocationFilter.appendChild(newOption);
 }
@@ -124,7 +123,7 @@ const assembleDate = document.querySelector('#assembleDateTime');
 const assembleLocation = document.querySelector('#assembleLocation');
 const assembleURL = document.querySelector('#assembleURL');
 
-function confirmActivity () {
+function confirmActivity() {
     if (activityName.value === "") {
         window.alert('請輸入活動名稱！');
     } else if (activityLocationFilter.value === "選擇海灘分段") {
@@ -147,7 +146,7 @@ function confirmActivity () {
     return false;
 }
 
-function loading () {
+function loading() {
     $.blockUI({
         message: '<h5>資料上傳中...</h5>',
         css: {
@@ -158,8 +157,8 @@ function loading () {
             '-moz-border-radius': '10px',
             opacity: .7,
             color: '#fff',
-            left:'25%',
-            width:'50%'
+            left: '25%',
+            width: '50%'
         }
     });
 }
@@ -195,7 +194,7 @@ function deleteActivity() {
 }
 
 function sendCreateActivity() {
-    let contactInfo = {name:activityOwner.value, phone:activityOwnerPhone.value}
+    let contactInfo = { name: activityOwner.value, phone: activityOwnerPhone.value }
 
     let activityReport = {
         "targetID": targetActivityData.id,
@@ -212,7 +211,7 @@ function sendCreateActivity() {
         url: 'https://hainan-api.oss.tw/api/beach/activity',
         type: 'POST',
         data: activityReport,
-        dataType:'json',
+        dataType: 'json',
         headers: {
             'x-access-token': getSid()
         },
@@ -229,7 +228,7 @@ function sendCreateActivity() {
 }
 
 function sendModifyActivity() {
-    let contactInfo = {name:activityOwner.value, phone:activityOwnerPhone.value}
+    let contactInfo = { name: activityOwner.value, phone: activityOwnerPhone.value }
 
     console.log(targetActivityData);
     let activityReport = {
@@ -250,7 +249,7 @@ function sendModifyActivity() {
         url: 'https://hainan-api.oss.tw/api/beach/activity/?id=' + activeId,
         type: 'PUT',
         data: activityReport,
-        dataType:'json',
+        dataType: 'json',
         headers: {
             'x-access-token': getSid()
         },
