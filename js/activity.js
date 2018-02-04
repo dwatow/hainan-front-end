@@ -94,7 +94,11 @@ activityDeleteButton.addEventListener('click', modifyActivity);
 const activityModifyButton = document.querySelector('.activityModify');
 activityModifyButton.addEventListener('click', deleteActivity);
 
-const activeId = document.querySelector('.editActive').dataset.id;
+let activeId;
+if (document.querySelector('.editActive')) {
+    activeId = document.querySelector('.editActive').dataset.id;
+}
+
 const activityName = document.querySelector('#activeName');
 const activityDescription = document.querySelector('#activeDescription');
 const activityOwner = document.querySelector('#activeOwner');
