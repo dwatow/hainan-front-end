@@ -90,9 +90,9 @@ function selectActivityPosition(event) {
 const activitySubmitBotton = document.querySelector('.activitySubmit');
 activitySubmitBotton.addEventListener('click', createActivity);
 const activityDeleteButton = document.querySelector('.activityDelete');
-activityDeleteButton.addEventListener('click', modifyActivity);
+activityDeleteButton.addEventListener('click', deleteActivity);
 const activityModifyButton = document.querySelector('.activityModify');
-activityModifyButton.addEventListener('click', deleteActivity);
+activityModifyButton.addEventListener('click', modifyActivity);
 
 let activeId;
 if (document.querySelector('.editActive')) {
@@ -158,6 +158,7 @@ function createActivity() {
 }
 
 function modifyActivity() {
+    console.log(confirmActivity(), confirm("確認修改已發起的活動？"));
     if (confirmActivity() && confirm("確認修改已發起的活動？")) {
         loading();
         sendModifyActivity();
@@ -279,16 +280,16 @@ function deleteActivity() {
         console.log('取消刪除')
     }
 };
-
-const activityModifyBtn = document.querySelector('.activityModify');
-activityModifyBtn.addEventListener('click', modifyActivity);
-
-function modifyActivity () {
-    let modifyConfirm = confirm("確認修改活動資訊嗎？");
-    if (modifyConfirm === true) {
-        console.log('修改成功');
-        //modify activity function
-    } else {
-        console.log('取消修改');
-    }
-};
+//
+// const activityModifyBtn = document.querySelector('.activityModify');
+// activityModifyBtn.addEventListener('click', modifyActivity);
+//
+// function modifyActivity () {
+//     let modifyConfirm = confirm("確認修改活動資訊嗎？");
+//     if (modifyConfirm === true) {
+//         console.log('修改成功');
+//         //modify activity function
+//     } else {
+//         console.log('取消修改');
+//     }
+// };

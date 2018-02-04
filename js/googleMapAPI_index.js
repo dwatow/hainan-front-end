@@ -334,7 +334,7 @@ function showActivityWindow(event) {
         "活動名稱": marker.activityTitle,
         "城市": marker.city,
         "活動日期": marker.date,
-        "集合地點": marker.place,
+        "集合地點": marker.collectionPlace,
         "聯絡人": marker.contact.name,
         "聯絡電話": marker.contact.phone,
         modifyActivityButton: marker.id
