@@ -222,7 +222,7 @@ function sendModifyActivity() {
 
     console.log(targetActivityData);
     let activityReport = {
-        "targetID": targetActivityData.id,
+        "targetID": activityLocation.value.split('_').pop(),
         "title": activityName.value,
         "description": activityDescription.value,
         "contact": JSON.stringify(contactInfo),
